@@ -1,22 +1,32 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Stack;
+
+import sun.font.CreatedFontTracker;
 
 public class node {
 private int x;
 private int y;
 private int id;
 private double temp;
-LinkedList<node> neighbours;
+ArrayList<node> neighbours;
 ArrayList<Integer> weights;
  public node(int x, int y, int id,double temp) {
 	 this.x =x;
 	 this.y =y;
 	 this.id =id;
 	 this.temp =temp;
-	 this.neighbours = new LinkedList<node>();
+	 this.neighbours = new ArrayList<node>();
 	 ArrayList<Integer> weights = new ArrayList<Integer>();
 }
- 
+public ArrayList<edge> getEdges() {
+	ArrayList<edge> a = new ArrayList<edge>();
+	for (int i = 0; i < this.neighbours.size(); i++) {
+		a.add(new edge(this, neighbours.get(i),weights.get(i)));
+	}
+	return a;
+}
+
 public int getX() {
 	return x;
 }
@@ -41,13 +51,14 @@ public double getTemp() {
 public void setTemp(double temp) {
 	this.temp = temp;
 }
-public LinkedList<node> getNeighbours() {
+
+
+public ArrayList<node> getNeighbours() {
 	return neighbours;
 }
-public void setNeighbours(LinkedList<node> neighbours) {
+public void setNeighbours(ArrayList<node> neighbours) {
 	this.neighbours = neighbours;
 }
-
 public ArrayList<Integer> getWeights() {
 	return weights;
 }
