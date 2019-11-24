@@ -3,9 +3,12 @@ import java.util.LinkedList;
 public class mst {
 	private boolean [] taken;
 	private edge [] edges;
-	
-	
-	
+	public mst empty()
+	{	
+		Graph g = new Graph(0);
+		mst a = new mst(g);
+		return a;
+	}
 	public mst (Graph grafos )
 	{
 	       grafos.quicksort(0,grafos.getE()-1); 

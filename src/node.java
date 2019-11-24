@@ -117,8 +117,7 @@ public boolean equals(Object obj) {
 
 @Override
 public String toString() {
-	return "node [x=" + x + ", y=" + y + ", id=" + id + ", temp=" + temp + ", neighbours=" + neighbours + ", weights="
-			+ weights + "]";
+	return id + "\t(" +x+","+y + ")\t" + temp ;
 }
 
 }
