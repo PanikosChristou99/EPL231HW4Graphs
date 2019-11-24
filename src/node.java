@@ -10,7 +10,14 @@ private int id;
 private double temp;
 ArrayList<node> neighbours;
 ArrayList<Double> weights;
- public node(int x, int y, int id,double temp) {
+int thesiStoPinaka;
+ public int getThesiStoPinaka() {
+	return thesiStoPinaka;
+}
+public void setThesiStoPinaka(int thesiStoPinaka) {
+	this.thesiStoPinaka = thesiStoPinaka;
+}
+public node(int x, int y, int id,double temp) {
 	 this.x =x;
 	 this.y =y;
 	 this.id =id;
@@ -29,7 +36,7 @@ public ArrayList<edge> getEdges() {
 public double isNeighborPlusD(node n2, double d)
 {
 	double alfa= (this.x-n2.getX())* (this.x-n2.getX());
-	double vita= (this.y=n2.getY())*(this.y=n2.getY());
+	double vita= (this.y-n2.getY())*(this.y-n2.getY());
 	double distance=Math.sqrt(alfa+vita);
 	if(distance<=d)
 	{

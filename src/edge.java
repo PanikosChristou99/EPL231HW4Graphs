@@ -16,6 +16,22 @@ public static edge copyEdge(edge original)
 	return temp;
 }
 
+public int compareTo(edge kati)
+{
+	if(this.weight>kati.weight)
+	{
+		return 1;
+	}
+	else if(this.weight<kati.weight)
+	{
+		return -1;
+	}
+	else 
+	{
+		return 0;
+	}
+}
+
 @Override
 public boolean equals(Object obj) {
 	if (this == obj)
