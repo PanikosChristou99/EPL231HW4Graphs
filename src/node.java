@@ -9,14 +9,14 @@ private int y;
 private int id;
 private double temp;
 ArrayList<node> neighbours;
-ArrayList<Integer> weights;
+ArrayList<Double> weights;
  public node(int x, int y, int id,double temp) {
 	 this.x =x;
 	 this.y =y;
 	 this.id =id;
 	 this.temp =temp;
 	 this.neighbours = new ArrayList<node>();
-	 this.weights = new ArrayList<Integer>();
+	 this.weights = new ArrayList<Double>();
 }
 public ArrayList<edge> getEdges() {
 	ArrayList<edge> a = new ArrayList<edge>();
@@ -24,6 +24,18 @@ public ArrayList<edge> getEdges() {
 		a.add(new edge(this, neighbours.get(i),weights.get(i)));
 	}
 	return a;
+}
+
+public double isNeighborPlusD(node n2, double d)
+{
+	double alfa= (this.x-n2.getX())* (this.x-n2.getX());
+	double vita= (this.y=n2.getY())*(this.y=n2.getY());
+	double distance=Math.sqrt(alfa+vita);
+	if(distance<=d)
+	{
+		return distance;
+	}
+	return -1;
 }
 
 public int getX() {
@@ -58,11 +70,11 @@ public ArrayList<node> getNeighbours() {
 public void setNeighbours(ArrayList<node> neighbours) {
 	this.neighbours = neighbours;
 }
-public ArrayList<Integer> getWeights() {
+public ArrayList<Double> getWeights() {
 	return weights;
 }
 
-public void setWeights(ArrayList<Integer> weights) {
+public void setWeights(ArrayList<Double> weights) {
 	this.weights = weights;
 }
 

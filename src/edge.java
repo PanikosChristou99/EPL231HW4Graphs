@@ -2,9 +2,9 @@
 public class edge {
 private node n1;
 private node n2;
-private int weight;
+private double weight;
 
-public edge(node n1, node n2,int weight) {
+public edge(node n1, node n2,double weight) {
 	this.n1 = n1;
 	this.n2 = n2;
 	this.weight = weight;
@@ -57,7 +57,7 @@ public node getN2() {
 public void setN2(node n2) {
 	this.n2 = n2;
 }
-public int getWeight() {
+public double getWeight() {
 	return weight;
 }
 public void setWeight(int weight) {
