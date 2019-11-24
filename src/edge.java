@@ -10,6 +10,12 @@ public edge(node n1, node n2,int weight) {
 	this.weight = weight;
 }
 
+public static edge copyEdge(edge original)
+{
+	edge temp=new edge(original.n1,original.n2, original.weight);
+	return temp;
+}
+
 @Override
 public boolean equals(Object obj) {
 	if (this == obj)

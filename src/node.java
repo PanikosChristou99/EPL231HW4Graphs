@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import sun.font.CreatedFontTracker;
 
 public class node {
 private int x;
@@ -17,7 +16,7 @@ ArrayList<Integer> weights;
 	 this.id =id;
 	 this.temp =temp;
 	 this.neighbours = new ArrayList<node>();
-	 ArrayList<Integer> weights = new ArrayList<Integer>();
+	 this.weights = new ArrayList<Integer>();
 }
 public ArrayList<edge> getEdges() {
 	ArrayList<edge> a = new ArrayList<edge>();

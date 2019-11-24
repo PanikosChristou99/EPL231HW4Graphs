@@ -6,7 +6,6 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.FileReader;
-import cs.ac.ucy.cs.epl231.ID904311.homework2.trie_904311;
 
 public class forest_904311_905811 {
 
@@ -36,9 +35,9 @@ public class forest_904311_905811 {
 				yAr.add(y);
 				tempAr.add(temp);
 			}
-			for (int j = 0; j < idAr.size(); j++) {
-				
-			}
+//			for (int j = 0; j < idAr.size(); j++) {
+//				
+//			}
 //			long endTime = System.currentTimeMillis();
 //			long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 //			long actualMemUsed = afterUsedMem - beforeUsedMem;
@@ -57,6 +56,8 @@ public class forest_904311_905811 {
 			System.exit(0);
 
 		} else {
+			
+			//TODO here we should create the graph before even asking for the users input.
 			try {
 				while (option != 7) {
 					System.out.println("please choose your option :");
@@ -114,10 +115,9 @@ public class forest_904311_905811 {
 				System.exit(0);
 
 			}
-
 		}
 
-		// printToFile();
+		// TODO printToFile();
 
 	}
 
