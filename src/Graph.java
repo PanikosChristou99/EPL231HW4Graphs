@@ -458,11 +458,10 @@ public class Graph {
 	 grafos.addNode(0, 0, 0, 20);
 	 grafos.addNode(0,1,1,35);
 	 grafos.addNode(2,1,2,50);
-	 grafos.addNode(3,4,3,23);
-	 grafos.addNode(5,0,4,-20);
 	 System.out.print(grafos.toString());
 	 
-	 grafos.quicksort(0, grafos.E-1);
+	 grafos.addNode(3,4,3,23);
+	 grafos.addNode(5,0,4,-20);
 	 System.out.print(grafos.toString());
 	
 	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
