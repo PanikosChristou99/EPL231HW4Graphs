@@ -12,7 +12,7 @@ public class Graph {
 		public MinimumSpanningTree (Graph grafos )
 		{
 			
-		       grafos.quicksort(0,grafos.getE()-1)
+		       grafos.quicksort(0,grafos.getE()-1);
 			this.edges= new edge[grafos.getV()-1];
 			this.taken=new boolean [grafos.getE()];
 			int [] TID = new int[grafos.getV()];
