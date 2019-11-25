@@ -8,30 +8,45 @@ private int x;
 private int y;
 private int id;
 private double temp;
-ArrayList<node> neighbours;
-ArrayList<Double> weights;
+ArrayList<neighbour> neighbours;
 int thesiStoPinaka;
+
  public int getThesiStoPinaka() {
 	return thesiStoPinaka;
 }
 public void setThesiStoPinaka(int thesiStoPinaka) {
 	this.thesiStoPinaka = thesiStoPinaka;
 }
+
 public node(int x, int y, int id,double temp) {
 	 this.x =x;
 	 this.y =y;
 	 this.id =id;
 	 this.temp =temp;
-	 this.neighbours = new ArrayList<node>();
-	 this.weights = new ArrayList<Double>();
+	 this.neighbours = new ArrayList<neighbour>();
 }
-public ArrayList<edge> getEdges() {
-	ArrayList<edge> a = new ArrayList<edge>();
-	for (int i = 0; i < this.neighbours.size(); i++) {
-		a.add(new edge(this, neighbours.get(i),weights.get(i)));
+public void addNeigb(neighbour n) {
+	this.neighbours.add(n);
+	
+}
+public void removeNeigh(neighbour n) {
+	for (int i = 0; i < neighbours.size(); i++) {
+		if(n.equals(neighbours.get(i))) {
+			neighbours.remove(i);
+			break;
+		}
 	}
-	return a;
+	
+	
 }
+//
+//public ArrayList<edge> getEdges() {
+//	ArrayList<edge> a = new ArrayList<edge>();
+//	for (int i = 0; i < this.neighbours.size(); i++) {
+//		a.add(new edge(this, neighbours.get(i),weights.get(i)));
+//	}
+//	return a;
+//}
 
 public double isNeighborPlusD(node n2, double d)
 {
@@ -71,20 +86,6 @@ public void setTemp(double temp) {
 }
 
 
-public ArrayList<node> getNeighbours() {
-	return neighbours;
-}
-public void setNeighbours(ArrayList<node> neighbours) {
-	this.neighbours = neighbours;
-}
-public ArrayList<Double> getWeights() {
-	return weights;
-}
-
-public void setWeights(ArrayList<Double> weights) {
-	this.weights = weights;
-}
-
 @Override
 public boolean equals(Object obj) {
 	if (this == obj)
@@ -103,11 +104,6 @@ public boolean equals(Object obj) {
 		return false;
 	if (Double.doubleToLongBits(temp) != Double.doubleToLongBits(other.temp))
 		return false;
-	if (weights == null) {
-		if (other.weights != null)
-			return false;
-	} else if (!weights.equals(other.weights))
-		return false;
 	if (x != other.x)
 		return false;
 	if (y != other.y)
@@ -115,9 +111,16 @@ public boolean equals(Object obj) {
 	return true;
 }
 
+public ArrayList<neighbour> getNeighbours() {
+	return neighbours;
+}
+public void setNeighbours(ArrayList<neighbour> neighbours) {
+	this.neighbours = neighbours;
+}
 @Override
 public String toString() {
-	return id + "\t(" +x+","+y + ")\t" + temp ;
+	return "node [x=" + x + ", y=" + y + ", id=" + id + ", temp=" + temp + ", neighbours=" + neighbours
+			+ ", thesiStoPinaka=" + thesiStoPinaka + "]";
 }
 
 }
