@@ -215,6 +215,7 @@ public class Graph {
 		return d;
 	}
 
+	
 	public void setD(double d) {
 		this.d = d;
 	}
