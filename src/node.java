@@ -119,8 +119,7 @@ public void setNeighbours(ArrayList<neighbour> neighbours) {
 }
 @Override
 public String toString() {
-	return "node [x=" + x + ", y=" + y + ", id=" + id + ", temp=" + temp + ", neighbours=" + neighbours
-			+ ", thesiStoPinaka=" + thesiStoPinaka + "]";
+	return id +"\t(" + x+","+y+")\t" + temp;
 }
 
 }

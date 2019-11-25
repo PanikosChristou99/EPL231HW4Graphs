@@ -4,13 +4,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.FileReader;
 import java.io.FileWriter;
+
 public class forest_904311_905811 {
 
 	public static void main(String[] args) {
+		if (args.length > 1 || args.length == 0) {
+			System.out.println("en evales i evales pano apo 2 arguments bye");
+			System.exit(0);
+
+		} 
 		double d = 10;
 		Graph g = new Graph(d);
 		try {
@@ -45,11 +52,7 @@ public class forest_904311_905811 {
 		
 		int option = 1;
 		Scanner in = new Scanner(System.in);
-		if (args.length > 1 || args.length == 0) {
-			System.out.println("en evales i evales pano apo 2 arguments bye");
-			System.exit(0);
-
-		} else {
+	
 			
 			try {
 				while (option != 7) {
@@ -65,24 +68,38 @@ public class forest_904311_905811 {
 					option = in.nextInt();
 					switch (option) {
 					case 1:
-						mst m = Graph.calcSpanTree();
+						g.calcSpanTree();
 						System.out.println();
 						continue;
 					case 2:
-						Graph.pr
+						System.out.println(g.getMst().toString());
 						System.out.println();
 						continue;
 
 					case 3:
-						insertNode()
+						System.out.println("dose m id :");
+						int id= in.nextInt();
+						System.out.println("dose m x :");
+						int x= in.nextInt();
+						System.out.println("dose m y :");
+						int y= in.nextInt();
+						System.out.println("dose m temp :");
+						double t= in.nextDouble();
+						g.addNode(x, y, id, t);
 						System.out.println();
 						continue;
 
 					case 4:
-						removeNode()
+						System.out.println("dose m id :");
+						id= in.nextInt();
+						g.removeNode(id);
 						System.out.println();
 					case 5:
-						changeTempOfNode()
+						System.out.println("dose m id :");
+						id= in.nextInt();
+						System.out.println("dose m temp :");
+						double temp = in.nextDouble();
+						g.search(id).setTemp(temp);
 						System.out.println();
 						continue;
 					case 6:
@@ -108,13 +125,20 @@ public class forest_904311_905811 {
 				System.exit(0);
 
 			}
-//		}
-//		File file = new File(args[0]);
-//		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-//		for (int i = 0; i < Graph.getV; i++) {
-//			writer.write(Graph.ge);
+	
+			File file = new File(args[0]);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+		for (int i = 0; i < g.getHashtable().length; i++) {
+			LinkedList<node> list = g.getHashtable(i);
+			if (list.isEmpty() == true) {
+				continue;
+			}
+			for (int j = 0; j < list.size(); j++) {
+			writer.write(list.get(j).toString()+'\n');
+			}
 		}
-
+			
+		
 	}
 
 }
