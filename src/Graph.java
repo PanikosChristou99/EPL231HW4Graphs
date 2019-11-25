@@ -7,13 +7,13 @@ public class Graph {
 	
 	private static class MinimumSpanningTree {
 		private boolean [] taken;
-		private edge [] edges;
+		private edge [] Medges;
 
 		public MinimumSpanningTree (Graph grafos )
 		{
 			
 		       grafos.quicksort(0,grafos.getE()-1);
-			this.edges= new edge[grafos.getV()-1];
+			this.Medges= new edge[grafos.getV()-1];
 			this.taken=new boolean [grafos.getE()];
 			int [] TID = new int[grafos.getV()];
 			int count=0;
@@ -47,7 +47,7 @@ public class Graph {
 				if(TID[index1]!=TID[index2])
 				{
 					this.taken[i]=true;
-					this.edges[thesi]=temp;
+					this.Medges[thesi]=temp;
 					thesi++;
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
@@ -111,10 +111,10 @@ public class Graph {
 		 public String toString()
 		 {
 			 String s= new String();
-			 s=s+"these are the edges\n\n";
-			 for(int i=0; i<this.edges.length; i++)
+			 s=s+"these are the Medges\n\n";
+			 for(int i=0; i<this.Medges.length; i++)
 			 {
-			 	s=s+"there is an edge between node with id "+this.edges[i].getN1().getId()+" and "+this.edges[i].getN2().getId()+" and the distance between them is "+this.edges[i].getWeight()+"\n";
+			 	s=s+"there is an edge between node with id "+this.Medges[i].getN1().getId()+" and "+this.Medges[i].getN2().getId()+" and the distance between them is "+this.Medges[i].getWeight()+"\n";
 			 }
 			 s=s+"this is the taken table";
 			 for(int i=0;i<this.taken.length;i++)
@@ -127,6 +127,17 @@ public class Graph {
 	}
 	static final int sizeOfHashtable = 5;
 	
+	public MinimumSpanningTree getMst() {
+		return mst;
+	}
+
+	public void setMst(MinimumSpanningTree mst) {
+		this.mst = mst;
+	}
+
+
+
+
 	private MinimumSpanningTree mst;
 	private int V;
 	private int E;
@@ -253,17 +264,11 @@ public class Graph {
 	}
 
 	public void removeNode(int id) {
-		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList<node> list = this.hashtable[i];
-			if (list.isEmpty() == true) {
-				continue;
-			}
-			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getId() == id)
-					list.remove(j);
-
-			}
+		for(int i=0; i<this.getE(); i++)
+		{
+			if(this.edges.)
 		}
+		
 	}
 
 	public void removeNode(node temp) {
