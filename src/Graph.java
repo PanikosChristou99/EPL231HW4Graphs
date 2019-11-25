@@ -237,6 +237,7 @@ public class Graph {
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
+		this.insertionSort();
 	}
 
   
