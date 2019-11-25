@@ -12,12 +12,13 @@ public class forest_904311_905811 {
 
 	public static void main(String[] args) {
 		double d = 10;
+		Graph g = new Graph(d);
 		try {
 			File file = new File(args[0]);
 			Scanner sc = new Scanner(file);
 //			long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 //			long startTime = System.currentTimeMillis();
-			Graph g = new Graph(d);
+		
 			while (sc.hasNextLine()) {// insert the dictionary to the trie
 				String str = sc.nextLine();
 				int x = Integer.parseInt(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
@@ -64,11 +65,11 @@ public class forest_904311_905811 {
 					option = in.nextInt();
 					switch (option) {
 					case 1:
-						
+						mst m = Graph.calcSpanTree();
 						System.out.println();
 						continue;
 					case 2:
-						printSpanTree()
+						Graph.pr
 						System.out.println();
 						continue;
 

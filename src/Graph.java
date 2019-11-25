@@ -269,7 +269,7 @@ public class Graph {
 	        // Return the converted LinkedList 
 	        return lL; 
 	    } 
-	public mst calcSpanTree() {
+	public static mst calcSpanTree() {
 		return new mst(this);
 	}
 
