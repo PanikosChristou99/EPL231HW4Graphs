@@ -5,7 +5,7 @@ import java.util.List;
 public class Graph {
 	
 	
-	private static class MinimumSpanningTree {
+	static class MinimumSpanningTree {
 		private boolean [] taken;
 		private edge [] Medges;
 

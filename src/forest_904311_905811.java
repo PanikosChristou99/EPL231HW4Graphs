@@ -2,11 +2,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 import java.io.FileReader;
 import java.io.FileWriter;
 
@@ -139,6 +142,47 @@ public class forest_904311_905811 {
 		}
 			
 		
+	}
+
+	ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
+		if (idA == idB) {
+			System.out.println("they are the same node");
+			return null;
+		}
+		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
+		while (!q.isEmpty()) {
+			ArrayDeque<edge> temp = q.remove();
+			if (temp.getLast().getN1().getId() == idA || temp.getLast().getN1().getId() == idB) {
+				return temp;
+			}
+			ArrayDeque<edge> copiedArrayDeque = (ArrayDeque<edge>) temp.clone();
+			ArrayList<edge> e = searchThroughEdgesForMatch(temp.getLast().getN1().getId(), g);
+			ArrayList<edge> e2 = searchThroughEdgesForMatch(temp.getLast().getN2().getId(), g);
+			e.addAll(e2);
+			for (int i = 0; i < e.size(); i++) {
+				ArrayDeque<edge> temp2 = temp.clone();
+				temp2.add(e.get(i));
+				q.add(temp2);
+			}
+		}
+		return null;
+	}
+
+	boolean containsNode(int idA, edge e) {
+		return e.getN1().getId() == idA || e.getN2().getId() == idA;
+	}
+
+	ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
+		ArrayList<edge> e = new ArrayList<edge>();
+		for (int i = 0; i < g.getMst().getMedges.length; i++) {
+			if (!g.getMst().getTaken[i]) {
+				if (containsNode(idA, g.getMst().getMedges[i])) {
+					e.add(g.getMst().getMedges[i]);
+					g.getMst().getTaken[i] = true;
+				}
+			}
+		}
+		return e;
 	}
 
 }
