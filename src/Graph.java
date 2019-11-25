@@ -6,22 +6,27 @@ public class Graph {
 	
 	
 	private static class MinimumSpanningTree {
-		private boolean [] taken;
-		private edge [] Medges;
+		private ArrayList<Boolean> taken;
+		private ArrayList<edge>  Medges;
+		
+		public MinimumSpanningTree()
+		{
+			taken= new ArrayList<Boolean>(1);
+			this.Medges= new ArrayList<edge>(0);
+		}
 
 		public MinimumSpanningTree (Graph grafos )
 		{
-			
-		       grafos.quicksort(0,grafos.getE()-1);
-			this.Medges= new edge[grafos.getV()-1];
-			this.taken=new boolean [grafos.getE()];
+		       grafos.quicksort(0,grafos.getE()-1);/// prob tuto theli svisimo
+			this.Medges= new ArrayList<edge>(grafos.getV()-1);
+			this.taken=new ArrayList<Boolean>(grafos.getE());
 			int [] TID = new int[grafos.getV()];
 			int count=0;
 			int thesi=0;
 			int countV=0;
-			for(int i=0; i<grafos.getSizeofhashtable(); i++)
+			for(int i=0; i<Graph.getSizeofhashtable(); i++)
 	    	{
-	    		LinkedList list=grafos.getHashtable(i);
+	    		LinkedList<node> list=grafos.getHashtable(i);
 	    		if(list.isEmpty()==true)
 	    		{
 	    			continue;
@@ -37,7 +42,7 @@ public class Graph {
 			int i=0;
 			for(int j=i; j<grafos.getE();j++)
 			{
-				this.taken[i]=false;
+				this.taken.set(i,false);
 			}
 			for( i=0 ;i<grafos.getE(); i++)
 			{
@@ -46,8 +51,8 @@ public class Graph {
 				int index2= temp.getN2().getThesiStoPinaka();
 				if(TID[index1]!=TID[index2])
 				{
-					this.taken[i]=true;
-					this.Medges[thesi]=temp;
+					this.taken.set(i, true);
+					this.Medges.set(thesi,temp);
 					thesi++;
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
@@ -75,7 +80,7 @@ public class Graph {
 				}
 				else
 				{
-					this.taken[i]=false;
+					this.taken.set(i, false);
 				}
 				if(count==grafos.getV())
 				{
@@ -108,18 +113,90 @@ public class Graph {
 				return false;
 		}
 		
+		public void addNodeInMST(node n, Graph grafos, node newNode)
+		{
+			this.Medges.ensureCapacity(this.Medges.size()+1);
+			this.taken.ensureCapacity(grafos.getE());
+			int [] TID = new int[grafos.getV()];
+			int count=0;
+			int thesi=0;
+			newNode.thesiStoPinaka=grafos.getV()-1; // logika tuto bori na en +-1
+			int i=0;
+			int intTemp=0;
+			for(i=0; i<grafos.getE();i++)
+			{
+				node node1=grafos.edges.get(i).getN1();
+				node node2=grafos.edges.get(i).getN2();
+				
+				if((node1.equals(newNode))||(node2.equals(newNode)))
+				{
+					intTemp=i;
+					break;
+				}
+				else
+				{
+					// en elenxo epd troi parapano ora.
+					TID[node1.thesiStoPinaka]=100;
+					TID[node2.thesiStoPinaka]=100;
+				}
+			}
+			for( i=intTemp ;i<grafos.getE(); i++)
+			{
+				edge temp=grafos.getEdge(i);
+				int index1=temp.getN1().getThesiStoPinaka();
+				int index2= temp.getN2().getThesiStoPinaka();
+				if(TID[index1]!=TID[index2])
+				{
+					this.taken.set(i,true);
+					this.Medges.set(thesi,temp);
+					thesi++;
+					boolean changeFirst=occurence(TID,index1,index2);
+					if(changeFirst==true)// tuto to occurence maybe en axristo
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index2])
+							{
+								TID[j]=TID[index1];
+								count++;
+							}
+						}
+					}
+					else
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index1])
+							{
+								TID[j]=TID[index2];
+								count++;
+							}
+						}
+					}
+				}
+				else
+				{
+					this.taken.set(i,false);
+				}
+				if(count==grafos.getV())
+				{
+					break;
+				}
+			}
+		}
+		
 		 public String toString()
 		 {
 			 String s= new String();
 			 s=s+"these are the Medges\n\n";
-			 for(int i=0; i<this.Medges.length; i++)
+			 for(int i=0; i<this.Medges.size(); i++)
 			 {
-			 	s=s+"there is an edge between node with id "+this.Medges[i].getN1().getId()+" and "+this.Medges[i].getN2().getId()+" and the distance between them is "+this.Medges[i].getWeight()+"\n";
+			 	s=s+"there is an edge between node with id "+this.Medges.get(i).getN1().getId()+" and "+this.Medges.get(i).getN2().getId()+" and the distance between them is "+this.Medges.get(i).getWeight()+"\n";
 			 }
 			 s=s+"this is the taken table";
-			 for(int i=0;i<this.taken.length;i++)
+			 for(int i=0;i<this.taken.size();i++)
 			 {
-				 s=s+" "+i+" "+this.taken[i]+"\n";
+				 s=s+" "+i+" "+this.taken.get(i)+"\n";
 			 }
 			 return s;
 		 }
@@ -160,8 +237,8 @@ public class Graph {
 		for (int i = 0; i < sizeOfHashtable; i++) {
 			hashtable[i] = new LinkedList<>();
 		}
-		this.edges = new ArrayList();
-		this.mst=null;
+		this.edges = new ArrayList<edge>();
+		this.mst=new MinimumSpanningTree(); ;
 	}
 
 	private static int hashFunction(node n) {
@@ -173,7 +250,7 @@ public class Graph {
 		// perno pu oula ta v gia to node ke vrisko kataposo ine gitones
 		// ean ine enimerono ke ta 2 to neightors
 		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList list = this.hashtable[i];
+			LinkedList<node> list = this.hashtable[i];
 			if (list.isEmpty() == true) {
 				continue;
 			}
@@ -186,6 +263,7 @@ public class Graph {
 					temp2=new neighbour(n,weight);
 					temp.neighbours.add(temp2);
 					addEdge(n, temp, weight);
+					this.mst.taken.set(this.getE()-1, false);
 				}
 			}
 		}
@@ -232,24 +310,33 @@ public class Graph {
 		E = e;
 	}
 
-	public void addNode(int x, int y, int id, double t) {
+	public node addNode(int x, int y, int id, double t) {
 		node temp = new node(x, y, id, t);
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
 		this.insertionSort();
+		return temp;
 	}
 
   
     
-	public void addNode(node temp) {
+	public node addNode(node temp) {
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
-		
+		return temp;
 	}
+	
+	
+	public void addNodeAdvance(int x, int y, int id, double t)
+	{
+		node temp=addNode(x,y,id,t);
+		this.mst.addNodeInMST(temp,this,temp);
+	}
+
 
 	public node search(int id) {
 		for (int i = 0; i < this.hashtable.length; i++) {
@@ -450,23 +537,21 @@ public class Graph {
 		n.setTemp(temp);
 	}
 
-
-
- public static void main(String [] args)
- {
-	 
- Graph grafos= new Graph(5.0);
-	 grafos.addNode(0, 0, 0, 20);
-	 grafos.addNode(0,1,1,35);
-	 grafos.addNode(2,1,2,50);
-	 System.out.print(grafos.toString());
-	 
-	 grafos.addNode(3,4,3,23);
-	 grafos.addNode(5,0,4,-20);
-	 System.out.print(grafos.toString());
-	
-	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
-
-		 System.out.print(kati.toString());	 
- }
+// public static void main(String [] args)
+// {
+//	 
+// Graph grafos= new Graph(5.0);
+//	 grafos.addNode(0, 0, 0, 20);
+//	 grafos.addNode(0,1,1,35);
+//	 grafos.addNode(2,1,2,50);
+//	 System.out.print(grafos.toString());
+//	 
+//	 grafos.addNode(3,4,3,23);
+//	 grafos.addNode(5,0,4,-20);
+//	 System.out.print(grafos.toString());
+//	
+//	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
+//
+//		 System.out.print(kati.toString());	 
+// }
 }
