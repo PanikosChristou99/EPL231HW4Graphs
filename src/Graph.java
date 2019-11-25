@@ -1,130 +1,13 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Graph {
 	
 	
-	static class MinimumSpanningTree {
-		private boolean [] taken;
-		private edge [] Medges;
 
-		public MinimumSpanningTree (Graph grafos )
-		{
-			
-		       grafos.quicksort(0,grafos.getE()-1);
-			this.Medges= new edge[grafos.getV()-1];
-			this.taken=new boolean [grafos.getE()];
-			int [] TID = new int[grafos.getV()];
-			int count=0;
-			int thesi=0;
-			int countV=0;
-			for(int i=0; i<grafos.getSizeofhashtable(); i++)
-	    	{
-	    		LinkedList list=grafos.getHashtable(i);
-	    		if(list.isEmpty()==true)
-	    		{
-	    			continue;
-	    		}
-	    		for(int j=0; j<list.size(); j++)
-	    		{
-	    			node temp=(node)list.get(j); // etsi exo to kathe v
-	    			temp.setThesiStoPinaka(countV);
-	    			TID[countV]=countV;
-	    			countV++;
-	    		}
-	    	}
-			int i=0;
-			for(int j=i; j<grafos.getE();j++)
-			{
-				this.taken[i]=false;
-			}
-			for( i=0 ;i<grafos.getE(); i++)
-			{
-				edge temp=grafos.getEdge(i);
-				int index1=temp.getN1().getThesiStoPinaka();
-				int index2= temp.getN2().getThesiStoPinaka();
-				if(TID[index1]!=TID[index2])
-				{
-					this.taken[i]=true;
-					this.Medges[thesi]=temp;
-					thesi++;
-					boolean changeFirst=occurence(TID,index1,index2);
-					if(changeFirst==true)
-					{
-						for(int j=0;j<TID.length; j++)
-						{
-							if(TID[j]==TID[index2])
-							{
-								TID[j]=TID[index1];
-								count++;
-							}
-						}
-					}
-					else
-					{
-						for(int j=0;j<TID.length; j++)
-						{
-							if(TID[j]==TID[index1])
-							{
-								TID[j]=TID[index2];
-								count++;
-							}
-						}
-					}
-				}
-				else
-				{
-					this.taken[i]=false;
-				}
-				if(count==grafos.getV())
-				{
-					break;
-				}
-			}
-		}
-		
-		boolean occurence(int [] TID,int index1,int index2)
-		{
-			int count1=0;
-			int count2=0;
-			for(int i=0; i<TID.length; i++)
-			{
-				if(TID[i]==TID[index1])
-				{
-					count1++;
-					continue;
-				}
-				else if(TID[i]==TID[index2])
-				{
-					count2++;
-				}
-			}
-			if(count1>=count2)
-			{
-				return true;
-			}
-			else
-				return false;
-		}
-		
-		 public String toString()
-		 {
-			 String s= new String();
-			 s=s+"these are the Medges\n\n";
-			 for(int i=0; i<this.Medges.length; i++)
-			 {
-			 	s=s+"there is an edge between node with id "+this.Medges[i].getN1().getId()+" and "+this.Medges[i].getN2().getId()+" and the distance between them is "+this.Medges[i].getWeight()+"\n";
-			 }
-			 s=s+"this is the taken table";
-			 for(int i=0;i<this.taken.length;i++)
-			 {
-				 s=s+" "+i+" "+this.taken[i]+"\n";
-			 }
-			 return s;
-		 }
-
-	}
 	static final int sizeOfHashtable = 5;
 	
 	public MinimumSpanningTree getMst() {
@@ -142,11 +25,11 @@ public class Graph {
 	private int V;
 	private int E;
 	private LinkedList<node> hashtable[];
-	private ArrayList<edge> edges;
+	ArrayList<edge> edges;
 	private double d;
 
 	// constructor
-	Graph(double d) {
+	public Graph(double d) {
 		this.d = d;
 		this.V=0;
 		this.E=0;
@@ -160,8 +43,8 @@ public class Graph {
 		for (int i = 0; i < sizeOfHashtable; i++) {
 			hashtable[i] = new LinkedList<>();
 		}
-		this.edges = new ArrayList();
-		this.mst=null;
+		this.edges = new ArrayList<edge>();
+		this.mst=new MinimumSpanningTree(); ;
 	}
 
 	private static int hashFunction(node n) {
@@ -173,7 +56,7 @@ public class Graph {
 		// perno pu oula ta v gia to node ke vrisko kataposo ine gitones
 		// ean ine enimerono ke ta 2 to neightors
 		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList list = this.hashtable[i];
+			LinkedList<node> list = this.hashtable[i];
 			if (list.isEmpty() == true) {
 				continue;
 			}
@@ -186,6 +69,7 @@ public class Graph {
 					temp2=new neighbour(n,weight);
 					temp.neighbours.add(temp2);
 					addEdge(n, temp, weight);
+					this.mst.taken.set(this.getE()-1, false);
 				}
 			}
 		}
@@ -215,12 +99,13 @@ public class Graph {
 		return d;
 	}
 
+	
 	public void setD(double d) {
 		this.d = d;
 	}
 
-	public static int getSizeofhashtable() {
-		return sizeOfHashtable;
+	public int getSizeofhashtable() {
+		return Graph.sizeOfHashtable;
 	}
 
 	public void setV(int v) {
@@ -231,24 +116,33 @@ public class Graph {
 		E = e;
 	}
 
-	public void addNode(int x, int y, int id, double t) {
+	public node addNode(int x, int y, int id, double t) {
 		node temp = new node(x, y, id, t);
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
 		this.insertionSort();
+		return temp;
 	}
 
   
     
-	public void addNode(node temp) {
+	public node addNode(node temp) {
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
-		
+		return temp;
 	}
+	
+	
+	public void addNodeAdvance(int x, int y, int id, double t)
+	{
+		node temp=addNode(x,y,id,t);
+		this.mst.addNodeInMST(temp,this,temp);
+	}
+
 
 	public node search(int id) {
 		for (int i = 0; i < this.hashtable.length; i++) {
@@ -420,7 +314,7 @@ public class Graph {
 		return s;
 	}
 	
-	 public static <T> List<T> convertALtoLL(List<T> aL) 
+	 public  <T> List<T> convertALtoLL(List<T> aL) 
 	    { 
 	  
 	        // Create an empty LinkedList 
@@ -448,25 +342,70 @@ public class Graph {
 		node n = search(id);
 		n.setTemp(temp);
 	}
+	ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
+		if (idA == idB) {
+			System.out.println("they are the same node");
+			return null;
+		}
+		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
+		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
+		ArrayDeque<edge> temp = new ArrayDeque<edge>();
+		for (int i = 0; i <e.size(); i++) {
+			temp = new ArrayDeque<edge>();
+			temp.push(e.get(i));
+			q.add(temp);
+		}
+		while (!q.isEmpty()) {
+			temp = q.remove();
+			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
+				return temp;
+			}
+		e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
+		ArrayList<edge>e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
+			e.addAll(e2);
+			for (int i = 0; i < e.size(); i++) {
+				ArrayDeque<edge> temp2 = temp.clone();
+				temp2.add(e.get(i));
+				q.add(temp2);
+			}
+		}
+		return null;
+	}
 
-
-
- public static void main(String [] args)
- {
-	 
- Graph grafos= new Graph(5.0);
-	 grafos.addNode(0, 0, 0, 20);
-	 grafos.addNode(0,1,1,35);
-	 grafos.addNode(2,1,2,50);
-	 grafos.addNode(3,4,3,23);
-	 grafos.addNode(5,0,4,-20);
-	 System.out.print(grafos.toString());
-	 
-	 grafos.quicksort(0, grafos.E-1);
-	 System.out.print(grafos.toString());
+	boolean containsNode(int idA, edge e) {
+		return e.getN1().getId() == idA || e.getN2().getId() == idA;
+	}
 	
-	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
+	ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
+		ArrayList<edge> e = new ArrayList<edge>();
+		for (int i = 0; i < g.getMst().Medges.size();i++) {
+			if (!g.getMst().taken.get(i)) {
+				if (containsNode(idA, g.getMst().Medges.get(i))) {
+					e.add(g.getMst().Medges.get(i));
+					g.getMst().taken.set(i, true);
+				}
+			}
+		}
+		return e;
+	}
+// public static void main(String [] args)
+// {
+//	 
+// Graph grafos= new Graph(5.0);
+//	 grafos.addNode(0, 0, 0, 20);
+//	 grafos.addNode(0,1,1,35);
+//	 grafos.addNode(2,1,2,50);
+//	 System.out.print(grafos.toString());
+//	 
+//	 grafos.addNode(3,4,3,23);
+//	 grafos.addNode(5,0,4,-20);
+//	 System.out.print(grafos.toString());
+//	
+//	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
+//
+//		 System.out.print(kati.toString());	 
+// }
 
-		 System.out.print(kati.toString());	 
- }
 }
+
+	
