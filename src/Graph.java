@@ -371,6 +371,26 @@ public class Graph {
 			quicksort(pi + 1, high);
 		}
 	}
+	
+    /*Function to sort array using insertion sort*/
+    void insertionSort() 
+    { 
+        int n = this.edges.size(); 
+        for (int i = 1; i < n; ++i) { 
+            edge key = this.edges.get(i); 
+            int j = i - 1; 
+  
+            /* Move elements of arr[0..i-1], that are 
+               greater than key, to one position ahead 
+               of their current position */
+            while (j >= 0 && this.edges.get(j).compareTo(key) > 0) { 
+            	this.edges.set(j + 1,this.edges.get(j)); 
+                j = j - 1; 
+            } 
+            this.edges.set(j + 1, key); 
+        } 
+    }
+
 
 	public edge getEdge(int index) {
 		return this.edges.get(index);
@@ -427,7 +447,6 @@ public class Graph {
 		node n = search(id);
 		n.setTemp(temp);
 	}
-
 
 
 
