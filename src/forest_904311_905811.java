@@ -150,14 +150,16 @@ public class forest_904311_905811 {
 			return null;
 		}
 		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
+		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
+		ArrayDeque<edge> temp = 
 		while (!q.isEmpty()) {
-			ArrayDeque<edge> temp = q.remove();
-			if (temp.getLast().getN1().getId() == idA || temp.getLast().getN1().getId() == idB) {
+			temp = q.remove();
+			if (temp.getLast().getN1().getId() == idB || temp.getLast().getN2().getId() == idB) {
 				return temp;
 			}
 			ArrayDeque<edge> copiedArrayDeque = (ArrayDeque<edge>) temp.clone();
-			ArrayList<edge> e = searchThroughEdgesForMatch(temp.getLast().getN1().getId(), g);
-			ArrayList<edge> e2 = searchThroughEdgesForMatch(temp.getLast().getN2().getId(), g);
+		e = searchThroughEdgesForMatch(temp.getLast().getN1().getId(), g);
+		ArrayList<edge>e2 = searchThroughEdgesForMatch(temp.getLast().getN2().getId(), g);
 			e.addAll(e2);
 			for (int i = 0; i < e.size(); i++) {
 				ArrayDeque<edge> temp2 = temp.clone();
