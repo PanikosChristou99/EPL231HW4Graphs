@@ -7,13 +7,13 @@ public class Graph {
 	
 	private static class MinimumSpanningTree {
 		private boolean [] taken;
-		private edge [] edges;
+		private edge [] Medges;
 
 		public MinimumSpanningTree (Graph grafos )
 		{
 			
 		       grafos.quicksort(0,grafos.getE()-1);
-			this.edges= new edge[grafos.getV()-1];
+			this.Medges= new edge[grafos.getV()-1];
 			this.taken=new boolean [grafos.getE()];
 			int [] TID = new int[grafos.getV()];
 			int count=0;
@@ -47,7 +47,7 @@ public class Graph {
 				if(TID[index1]!=TID[index2])
 				{
 					this.taken[i]=true;
-					this.edges[thesi]=temp;
+					this.Medges[thesi]=temp;
 					thesi++;
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
@@ -111,10 +111,10 @@ public class Graph {
 		 public String toString()
 		 {
 			 String s= new String();
-			 s=s+"these are the edges\n\n";
-			 for(int i=0; i<this.edges.length; i++)
+			 s=s+"these are the Medges\n\n";
+			 for(int i=0; i<this.Medges.length; i++)
 			 {
-			 	s=s+"there is an edge between node with id "+this.edges[i].getN1().getId()+" and "+this.edges[i].getN2().getId()+" and the distance between them is "+this.edges[i].getWeight()+"\n";
+			 	s=s+"there is an edge between node with id "+this.Medges[i].getN1().getId()+" and "+this.Medges[i].getN2().getId()+" and the distance between them is "+this.Medges[i].getWeight()+"\n";
 			 }
 			 s=s+"this is the taken table";
 			 for(int i=0;i<this.taken.length;i++)
@@ -127,6 +127,17 @@ public class Graph {
 	}
 	static final int sizeOfHashtable = 5;
 	
+	public MinimumSpanningTree getMst() {
+		return mst;
+	}
+
+	public void setMst(MinimumSpanningTree mst) {
+		this.mst = mst;
+	}
+
+
+
+
 	private MinimumSpanningTree mst;
 	private int V;
 	private int E;
@@ -170,10 +181,10 @@ public class Graph {
 				node temp = (node) list.get(j); // etsi exo to kathe v
 				double weight = n.isNeighborPlusD(temp, d);
 				if (weight != -1) {
-					n.neighbours.add(temp);
-					n.weights.add(weight);
-					temp.neighbours.add(n);
-					temp.weights.add(weight);
+					neighbour temp2=new neighbour(temp,weight);
+					n.neighbours.add(temp2);
+					temp2=new neighbour(n,weight);
+					temp.neighbours.add(temp2);
 					addEdge(n, temp, weight);
 				}
 			}
@@ -226,6 +237,7 @@ public class Graph {
 		int index = hashFunction(temp);
 		this.hashtable[index].add(temp);
 		this.V++;
+		this.insertionSort();
 	}
 
   
@@ -252,31 +264,48 @@ public class Graph {
 		return null;
 	}
 
+	
+	/* check if i missed to remove something   */
 	public void removeNode(int id) {
-		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList<node> list = this.hashtable[i];
-			if (list.isEmpty() == true) {
+		for(int i=0; i<this.getE(); i++)
+		{
+			node temp = null;
+			if(this.edges.get(i).getN1().getId()==id)
+			{
+				temp=this.edges.get(i).getN2();
+			}
+			else if(this.edges.get(i).getN2().getId()==id)
+			{
+				temp=this.edges.get(i).getN1();
+			}
+			if(temp==null)
+			{
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getId() == id)
-					list.remove(j);
-
-			}
+			this.edges.remove(i);
+			temp.removeNeighbour(temp);
 		}
+		
 	}
 
-	public void removeNode(node temp) {
-		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList<node> list = this.hashtable[i];
-			if (list.isEmpty() == true) {
+	public void removeNode(node n) {
+		for(int i=0; i<this.getE(); i++)
+		{
+			node temp = null;
+			if(this.edges.get(i).getN1().equals(n))
+			{
+				temp=this.edges.get(i).getN2();
+			}
+			else if(this.edges.get(i).getN2().equals(n))
+			{
+				temp=this.edges.get(i).getN1();
+			}
+			if(temp==null)
+			{
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getId() == temp.getId())
-					list.remove(j);
-
-			}
+			this.edges.remove(i);
+			temp.removeNeighbour(temp);
 		}
 	}
 //	List<edge> l = convertALtoLL(this.edges); experiment en na t akamo avrio!
@@ -343,6 +372,26 @@ public class Graph {
 			quicksort(pi + 1, high);
 		}
 	}
+	
+    /*Function to sort array using insertion sort*/
+    void insertionSort() 
+    { 
+        int n = this.edges.size(); 
+        for (int i = 1; i < n; ++i) { 
+            edge key = this.edges.get(i); 
+            int j = i - 1; 
+  
+            /* Move elements of arr[0..i-1], that are 
+               greater than key, to one position ahead 
+               of their current position */
+            while (j >= 0 && this.edges.get(j).compareTo(key) > 0) { 
+            	this.edges.set(j + 1,this.edges.get(j)); 
+                j = j - 1; 
+            } 
+            this.edges.set(j + 1, key); 
+        } 
+    }
+
 
 	public edge getEdge(int index) {
 		return this.edges.get(index);
@@ -399,7 +448,6 @@ public class Graph {
 		node n = search(id);
 		n.setTemp(temp);
 	}
-
 
 
 

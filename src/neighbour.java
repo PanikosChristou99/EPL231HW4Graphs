@@ -1,8 +1,8 @@
 
 public class neighbour {
 private node n1;
-private int weight;
-public neighbour(node n1, int weight) {
+private double weight;
+public neighbour(node n1, double weight) {
 	super();
 	this.n1 = n1;
 	this.weight = weight;
@@ -34,7 +34,7 @@ public node getN1() {
 public void setN1(node n1) {
 	this.n1 = n1;
 }
-public int getWeight() {
+public double getWeight() {
 	return weight;
 }
 public void setWeight(int weight) {
