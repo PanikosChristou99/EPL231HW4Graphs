@@ -181,10 +181,10 @@ public class Graph {
 				node temp = (node) list.get(j); // etsi exo to kathe v
 				double weight = n.isNeighborPlusD(temp, d);
 				if (weight != -1) {
-					n.neighbours.add(temp);
-					n.weights.add(weight);
-					temp.neighbours.add(n);
-					temp.weights.add(weight);
+					neighbour temp2=new neighbour(temp,weight);
+					n.neighbours.add(temp2);
+					temp2=new neighbour(n,weight);
+					temp.neighbours.add(temp2);
 					addEdge(n, temp, weight);
 				}
 			}
@@ -263,25 +263,48 @@ public class Graph {
 		return null;
 	}
 
+	
+	/* check if i missed to remove something   */
 	public void removeNode(int id) {
 		for(int i=0; i<this.getE(); i++)
 		{
-			if(this.edges.)
+			node temp = null;
+			if(this.edges.get(i).getN1().getId()==id)
+			{
+				temp=this.edges.get(i).getN2();
+			}
+			else if(this.edges.get(i).getN2().getId()==id)
+			{
+				temp=this.edges.get(i).getN1();
+			}
+			if(temp==null)
+			{
+				continue;
+			}
+			this.edges.remove(i);
+			temp.removeNeighbour(temp);
 		}
 		
 	}
 
-	public void removeNode(node temp) {
-		for (int i = 0; i < this.hashtable.length; i++) {
-			LinkedList<node> list = this.hashtable[i];
-			if (list.isEmpty() == true) {
+	public void removeNode(node n) {
+		for(int i=0; i<this.getE(); i++)
+		{
+			node temp = null;
+			if(this.edges.get(i).getN1().equals(n))
+			{
+				temp=this.edges.get(i).getN2();
+			}
+			else if(this.edges.get(i).getN2().equals(n))
+			{
+				temp=this.edges.get(i).getN1();
+			}
+			if(temp==null)
+			{
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getId() == temp.getId())
-					list.remove(j);
-
-			}
+			this.edges.remove(i);
+			temp.removeNeighbour(temp);
 		}
 	}
 //	List<edge> l = convertALtoLL(this.edges); experiment en na t akamo avrio!
