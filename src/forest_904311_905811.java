@@ -151,6 +151,51 @@
 //				}
 //			}
 //		}
+//	}//	ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
+//		if (idA == idB) {
+//			System.out.println("they are the same node");
+//			return null;
+//		}
+//		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
+//		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
+//		ArrayDeque<edge> temp = new ArrayDeque<edge>();
+//		for (int i = 0; i <e.size(); i++) {
+//			temp = new ArrayDeque<edge>();
+//			temp.push(e.get(i));
+//			q.add(temp);
+//		}
+//		while (!q.isEmpty()) {
+//			temp = q.remove();
+//			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
+//				return temp;
+//			}
+//		e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
+//		ArrayList<edge>e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
+//			e.addAll(e2);
+//			for (int i = 0; i < e.size(); i++) {
+//				ArrayDeque<edge> temp2 = temp.clone();
+//				temp2.add(e.get(i));
+//				q.add(temp2);
+//			}
+//		}
+//		return null;
+//	}
+//
+//	boolean containsNode(int idA, edge e) {
+//		return e.getN1().getId() == idA || e.getN2().getId() == idA;
+//	}
+//	
+//	ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
+//		ArrayList<edge> e = new ArrayList<edge>();
+//		for (int i = 0; i < g.getMst().Medges.size();i++) {
+//			if (!g.getMst().taken.get(i)) {
+//				if (containsNode(idA, g.getMst().Medges.get(i))) {
+//					e.add(g.getMst().Medges.get(i));
+//					g.getMst().taken.set(i, true);
+//				}
+//			}
+//		}
+//		return e;
 //	}
 //
 //}
