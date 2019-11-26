@@ -1,3 +1,7 @@
+package src;
+
+import src.neighbour;
+import src.node;
 
 public class neighbour {
 private node n1;

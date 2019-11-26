@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -131,7 +133,8 @@ public void setNeighbours(ArrayList<neighbour> neighbours) {
 }
 @Override
 public String toString() {
-	return id +"\t(" + x+","+y+")\t" + temp;
+	return "node [x=" + x + ", y=" + y + ", id=" + id + ", temp=" + temp + ", neighbours=" + neighbours
+			+ ", thesiStoPinaka=" + thesiStoPinaka + "]";
 }
 
 }

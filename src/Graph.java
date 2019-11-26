@@ -1,8 +1,7 @@
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Graph {
 	
@@ -10,26 +9,16 @@ public class Graph {
 
 	static final int sizeOfHashtable = 5;
 	
-	public MinimumSpanningTree getMst() {
-		return mst;
-	}
-
-	public void setMst(MinimumSpanningTree mst) {
-		this.mst = mst;
-	}
-
-
-
 
 	private MinimumSpanningTree mst;
 	private int V;
 	private int E;
 	private LinkedList<node> hashtable[];
-	ArrayList<edge> edges;
+	private ArrayList<edge> edges;
 	private double d;
 
 	// constructor
-	public Graph(double d) {
+	Graph(double d) {
 		this.d = d;
 		this.V=0;
 		this.E=0;
@@ -51,7 +40,17 @@ public class Graph {
 		int temp = n.getId() % sizeOfHashtable;
 		return temp;
 	}
+	
+	public MinimumSpanningTree getMst() {
+		return mst;
+	}
 
+	public void setMst(MinimumSpanningTree mst) {
+		this.mst = mst;
+	}
+
+	
+	
 	public void findNeighbors(node n) {
 		// perno pu oula ta v gia to node ke vrisko kataposo ine gitones
 		// ean ine enimerono ke ta 2 to neightors
@@ -69,7 +68,6 @@ public class Graph {
 					temp2=new neighbour(n,weight);
 					temp.neighbours.add(temp2);
 					addEdge(n, temp, weight);
-					this.mst.taken.set(this.getE()-1, false);
 				}
 			}
 		}
@@ -104,8 +102,8 @@ public class Graph {
 		this.d = d;
 	}
 
-	public int getSizeofhashtable() {
-		return Graph.sizeOfHashtable;
+	public static int getSizeofhashtable() {
+		return sizeOfHashtable;
 	}
 
 	public void setV(int v) {
@@ -211,6 +209,7 @@ public class Graph {
 	void addEdge(node node1, node node2, double weight) {
 		edge temp = new edge(node1, node2, weight);
 		this.edges.add(temp);
+		this.mst.getTaken().add(false);
 		this.E++;
 	}
 	
@@ -314,7 +313,7 @@ public class Graph {
 		return s;
 	}
 	
-	 public  <T> List<T> convertALtoLL(List<T> aL) 
+	 public static <T> List<T> convertALtoLL(List<T> aL) 
 	    { 
 	  
 	        // Create an empty LinkedList 
@@ -330,82 +329,31 @@ public class Graph {
 	        // Return the converted LinkedList 
 	        return lL; 
 	    } 
-	public MinimumSpanningTree calcSpanTree() {
-		return new MinimumSpanningTree (this);
-	}
 
 	void printSpanTree(MinimumSpanningTree m) {
 		System.out.println(m);
 	}
-
+	//
 	void changeTempOfNode(int id, int temp) {
 		node n = search(id);
 		n.setTemp(temp);
 	}
-	ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
-		if (idA == idB) {
-			System.out.println("they are the same node");
-			return null;
-		}
-		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
-		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
-		ArrayDeque<edge> temp = new ArrayDeque<edge>();
-		for (int i = 0; i <e.size(); i++) {
-			temp = new ArrayDeque<edge>();
-			temp.push(e.get(i));
-			q.add(temp);
-		}
-		while (!q.isEmpty()) {
-			temp = q.remove();
-			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
-				return temp;
-			}
-		e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
-		ArrayList<edge>e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
-			e.addAll(e2);
-			for (int i = 0; i < e.size(); i++) {
-				ArrayDeque<edge> temp2 = temp.clone();
-				temp2.add(e.get(i));
-				q.add(temp2);
-			}
-		}
-		return null;
-	}
 
-	boolean containsNode(int idA, edge e) {
-		return e.getN1().getId() == idA || e.getN2().getId() == idA;
-	}
-	
-	ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
-		ArrayList<edge> e = new ArrayList<edge>();
-		for (int i = 0; i < g.getMst().Medges.size();i++) {
-			if (!g.getMst().taken.get(i)) {
-				if (containsNode(idA, g.getMst().Medges.get(i))) {
-					e.add(g.getMst().Medges.get(i));
-					g.getMst().taken.set(i, true);
-				}
-			}
-		}
-		return e;
-	}
-// public static void main(String [] args)
-// {
-//	 
-// Graph grafos= new Graph(5.0);
-//	 grafos.addNode(0, 0, 0, 20);
-//	 grafos.addNode(0,1,1,35);
-//	 grafos.addNode(2,1,2,50);
-//	 System.out.print(grafos.toString());
-//	 
-//	 grafos.addNode(3,4,3,23);
-//	 grafos.addNode(5,0,4,-20);
-//	 System.out.print(grafos.toString());
-//	
-//	 MinimumSpanningTree kati =new MinimumSpanningTree(grafos);
-//
-//		 System.out.print(kati.toString());	 
-// }
+ public static void main(String [] args)
+ {
+	 
+ Graph grafos= new Graph(3.0);
+	 grafos.addNode(0, 0, 0, 20);
+	 grafos.addNode(0,1,1,35);
+	 grafos.addNode(2,1,2,50);
+	 grafos.addNode(4,1,3,50);
+	 System.out.print(grafos.toString());
+	 	
+	 grafos.mst.createMinimumSpanningTree(grafos);
+		 System.out.print(grafos.mst.toString());	
+	grafos.addNodeAdvance(0, 3,5,100);
+	 System.out.print(grafos.toString());
+	 System.out.print(grafos.mst.toString());	
 
+ }
 }
-
-	
