@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import src.Graph;
-import src.node;
 
 public  class MinimumSpanningTree {
 		private ArrayList<Boolean> taken;
@@ -86,6 +84,83 @@ public  class MinimumSpanningTree {
 				}
 			}
 		}
+		public void recreateMinimumSpanningTree (Graph grafos )
+		{
+		       //grafos.quicksort(0,grafos.getE()-1);/// prob tuto theli svisimo
+			grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1);
+			grafos.getMst().taken= new ArrayList<Boolean>();
+			for(int i=0; i<grafos.getE(); i++)
+			{
+				grafos.getMst().taken.add(false);
+			}
+			int [] TID = new int[grafos.getV()];
+			int count=0;
+			int thesi=0;
+			int countV=0;
+			for(int i=0; i<Graph.getSizeofhashtable(); i++)
+	    	{
+	    		LinkedList<node> list=grafos.getHashtable(i);
+	    		if(list.isEmpty()==true)
+	    		{
+	    			continue;
+	    		}
+	    		for(int j=0; j<list.size(); j++)
+	    		{
+	    			node temp=(node)list.get(j); // etsi exo to kathe v
+	    			temp.setThesiStoPinaka(countV);
+	    			TID[countV]=countV;
+	    			countV++;
+	    		}
+	    	}
+			int i=0;
+//			for(int j=i; j<grafos.getE();j++)
+//			{
+//				grafos.getMst().taken.set(i,false);
+//			}
+			for( i=0 ;i<grafos.getE(); i++)
+			{
+				edge temp=grafos.getEdge(i);
+				int index1=temp.getN1().getThesiStoPinaka();
+				int index2= temp.getN2().getThesiStoPinaka();
+				if(TID[index1]!=TID[index2])
+				{
+					grafos.getMst().taken.set(i, true);
+					grafos.getMst().Medges.add(temp);
+					thesi++;
+					boolean changeFirst=occurence(TID,index1,index2);
+					if(changeFirst==true)
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index2])
+							{
+								TID[j]=TID[index1];
+								count++;
+							}
+						}
+					}
+					else
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index1])
+							{
+								TID[j]=TID[index2];
+								count++;
+							}
+						}
+					}
+				}
+				else
+				{
+					grafos.getMst().taken.set(i, false);
+				}
+				if(count==grafos.getV())
+				{
+					break;
+				}
+			}
+		}
 		
 		boolean occurence(int [] TID,int index1,int index2)
 		{
@@ -109,6 +184,87 @@ public  class MinimumSpanningTree {
 			}
 			else
 				return false;
+		}
+		public void addNodeInMSTVersion2(node n,Graph grafos,ArrayList<edge> newEdges)
+		{
+			grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1);
+//			grafos.getMst().taken= new ArrayList<Boolean>();
+//			for(int i=0; i<grafos.getE(); i++)
+//			{
+//				grafos.getMst().taken.add(false);
+//			}
+			int [] TID = new int[grafos.getV()];
+			int count=0;
+			int thesi=0;
+			int countV=0;
+			for(int i=0; i<Graph.getSizeofhashtable(); i++)
+	    	{
+	    		LinkedList<node> list=grafos.getHashtable(i);
+	    		if(list.isEmpty()==true)
+	    		{
+	    			continue;
+	    		}
+	    		for(int j=0; j<list.size(); j++)
+	    		{
+	    			node temp=(node)list.get(j); // etsi exo to kathe v
+	    			temp.setThesiStoPinaka(countV);
+	    			TID[countV]=countV;
+	    			countV++;
+	    		}
+	    	}
+			for(int i=0; i<grafos.getMst().Medges.size(); i++)
+			{
+				newEdges.add(grafos.getMst().getMedge(i));
+			}
+			Graph.insertionSort(newEdges);
+			int i=0;
+//			for(int j=i; j<grafos.getE();j++)
+//			{
+//				grafos.getMst().taken.set(i,false);
+//			}
+			for( i=0 ;i<newEdges.size(); i++)
+			{
+				edge temp=newEdges.get(i);
+				int index1=temp.getN1().getThesiStoPinaka();
+				int index2= temp.getN2().getThesiStoPinaka();
+				if(TID[index1]!=TID[index2])
+				{
+					//grafos.getMst().taken.set(i, true);
+					grafos.getMst().Medges.add(temp);
+					thesi++;
+					boolean changeFirst=occurence(TID,index1,index2);
+					if(changeFirst==true)
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index2])
+							{
+								TID[j]=TID[index1];
+								count++;
+							}
+						}
+					}
+					else
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index1])
+							{
+								TID[j]=TID[index2];
+								count++;
+							}
+						}
+					}
+				}
+				else
+				{
+					//grafos.getMst().taken.set(i, false);
+				}
+				if(count==grafos.getV())
+				{
+					break;
+				}
+			}
 		}
 		
 		public void addNodeInMST(Graph grafos, node newNode)
@@ -142,9 +298,10 @@ public  class MinimumSpanningTree {
 				}
 				
 			}
-			if(i<grafos.getMst().Medges.size())
+			ArrayList<edge> edgeTemp= new ArrayList<edge>(intTemp);
+			for( i=0; i<intTemp; i++)
 			{
-			grafos.getMst().Medges=(ArrayList<edge>) grafos.getMst().Medges.subList(0, i);
+				edgeTemp.add(grafos.getMst().getMedge(i));
 			}
 			for( i=intTemp ;i<grafos.getE(); i++)
 			{
@@ -218,10 +375,16 @@ public  class MinimumSpanningTree {
 					TID[node2.thesiStoPinaka]=100;
 				}
 			}
-			if(i<grafos.getMst().Medges.size())
+//			if(intTemp<grafos.getMst().Medges.size())
+//			{
+//			grafos.getMst().Medges= (ArrayList<edge>) grafos.getMst().Medges.subList(0, intTemp);
+//			}
+			ArrayList<edge> edgeTemp= new ArrayList<edge>(intTemp);
+			for( i=0; i<intTemp; i++)
 			{
-			grafos.getMst().Medges=(ArrayList<edge>) grafos.getMst().Medges.subList(0, i);
+				edgeTemp.add(grafos.getMst().getMedge(i));
 			}
+			grafos.getMst().setMedges(edgeTemp);
 			for( i=intTemp ;i<grafos.getE(); i++)
 			{
 				edge temp=grafos.getEdge(i);
@@ -280,6 +443,87 @@ public  class MinimumSpanningTree {
 			}
 		}
 		
+		public void removeNodeInMSTVersion2(node n, Graph grafos,ArrayList<edge>newEdges )
+		{
+		grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1-(1));
+		int [] TID = new int[grafos.getV()];
+		int count=0;
+		int thesi=0;
+		int countV=0;
+		for(int i=0; i<Graph.getSizeofhashtable(); i++)
+    	{
+    		LinkedList<node> list=grafos.getHashtable(i);
+    		if(list.isEmpty()==true)
+    		{
+    			continue;
+    		}
+    		for(int j=0; j<list.size(); j++)
+    		{
+    			node temp=(node)list.get(j); // etsi exo to kathe v
+    			temp.setThesiStoPinaka(countV);
+    			TID[countV]=countV;
+    			countV++;
+    		}
+    	}
+		for(int i=0; i<grafos.getMst().Medges.size(); i++)
+		{
+			edge temp= grafos.getMst().getMedge(i);
+			if(temp.isOneOfNodes(n)==false)
+			{
+			newEdges.add(temp);
+			}
+		}
+		Graph.insertionSort(newEdges);
+		int i=0;
+//		for(int j=i; j<grafos.getE();j++)
+//		{
+//			grafos.getMst().taken.set(i,false);
+//		}
+		for( i=0 ;i<newEdges.size(); i++)
+		{
+			edge temp=newEdges.get(i);
+			int index1=temp.getN1().getThesiStoPinaka();
+			int index2= temp.getN2().getThesiStoPinaka();
+			if(TID[index1]!=TID[index2])
+			{
+				//grafos.getMst().taken.set(i, true);
+				grafos.getMst().Medges.add(temp);
+				thesi++;
+				boolean changeFirst=occurence(TID,index1,index2);
+				if(changeFirst==true)
+				{
+					for(int j=0;j<TID.length; j++)
+					{
+						if(TID[j]==TID[index2])
+						{
+							TID[j]=TID[index1];
+							count++;
+						}
+					}
+				}
+				else
+				{
+					for(int j=0;j<TID.length; j++)
+					{
+						if(TID[j]==TID[index1])
+						{
+							TID[j]=TID[index2];
+							count++;
+						}
+					}
+				}
+			}
+			else
+			{
+				//grafos.getMst().taken.set(i, false);
+			}
+			if(count==grafos.getV())
+			{
+				break;
+			}
+		}
+		}
+		
 		 public ArrayList<Boolean> getTaken() {
 			return taken;
 		}
@@ -290,6 +534,10 @@ public  class MinimumSpanningTree {
 
 		public ArrayList<edge> getMedges() {
 			return Medges;
+		}
+		
+		public edge getMedge(int index) {
+			return Medges.get(index);
 		}
 
 		public void setMedges(ArrayList<edge> medges) {

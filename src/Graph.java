@@ -47,12 +47,54 @@ public class Graph {
 	public void setMst(MinimumSpanningTree mst) {
 		this.mst = mst;
 	}
+	
+	public void addNodeVersion2(int x, int y, int id, double t)
+	{
+		node temp= new node(x,y,id,t);
+		ArrayList<edge> newEdges= this.findNeighbors(temp);
+		this.addNode(temp);
+		this.insertionSort();
+		this.mst.addNodeInMSTVersion2(temp,this, newEdges);
+	}
+	
+	public void removeNodeVersion2(int id)
+	{
+		node toBeRemoved= search(id);
+		ArrayList<node> nei= new ArrayList<node>();
+		for(int i=0; i< toBeRemoved.neighbours.size(); i++)
+		{
+			nei.add(toBeRemoved.neighbours.get(i).getN1());
+		}
+		ArrayList<edge> newEdges = new ArrayList<edge>();
+		for(int i=0; i<nei.size(); i++)
+		{
+			for(int j=0; j<nei.get(i).neighbours.size(); j++)
+			{
+				node n1=nei.get(i);
+				node n2=n1.neighbours.get(j).getN1();
+				if(n2.getId()==toBeRemoved.getId())
+				{
+					//skip
+				}
+				else
+				{
+				edge temp= new edge(n1, n2,node.findDistance(n1, n2) );
+				newEdges.add(temp);
+				}
+			}
+		}
+		
+		this.mst.removeNodeInMSTVersion2( toBeRemoved,this, newEdges);
+		this.removeNode(toBeRemoved);
+	}
 
 	
 	
-	public void findNeighbors(node n) {
+	public ArrayList<edge> findNeighbors(node n) {
 		// perno pu oula ta v gia to node ke vrisko kataposo ine gitones
 		// ean ine enimerono ke ta 2 to neightors
+		
+		ArrayList<edge> array= new ArrayList<edge>();
 		for (int i = 0; i < this.hashtable.length; i++) {
 			LinkedList<node> list = this.hashtable[i];
 			if (list.isEmpty() == true) {
@@ -66,10 +108,13 @@ public class Graph {
 					n.neighbours.add(temp2);
 					temp2=new neighbour(n,weight);
 					temp.neighbours.add(temp2);
-					addEdge(n, temp, weight);
+					edge tempE=new edge(n,temp,weight);
+					addEdge(tempE);
+					array.add(tempE);
 				}
 			}
 		}
+		return array;
 	}
 	
 	public LinkedList<node>[] getHashtable() {
@@ -167,6 +212,8 @@ public class Graph {
 	
 	/* check if i missed to remove something   */
 	public void removeNode(int id) {
+		
+		// if it exists panta.
 		for(int i=0; i<this.getE(); i++)
 		{
 			node temp = null;
@@ -183,12 +230,30 @@ public class Graph {
 				continue;
 			}
 			this.edges.remove(i);
+			this.E--;
 			temp.removeNeighbour(temp);
+			i=i-1;
 		}
-		
+		for(int i=0; i<sizeOfHashtable; i++)
+		{
+			LinkedList lista=this.getHashtable(i);
+			for(int j=0; j<lista.size(); j++)
+			{
+				node temp=(node) lista.get(j);
+				if(temp.getId()==id)
+				{
+					lista.remove(j);
+					this.V--;
+					break;
+					
+				}
+			}
+		}
 	}
 
 	public void removeNode(node n) {
+		
+		// if it exists panta.
 		for(int i=0; i<this.getE(); i++)
 		{
 			node temp = null;
@@ -205,7 +270,23 @@ public class Graph {
 				continue;
 			}
 			this.edges.remove(i);
+			this.E--;
 			temp.removeNeighbour(temp);
+			i=i-1;
+		}
+		for(int i=0; i<sizeOfHashtable; i++)
+		{
+			LinkedList lista=this.getHashtable(i);
+			for(int j=0; j<lista.size(); j++)
+			{
+				node temp=(node) lista.get(j);
+				if(temp.equals(n))
+				{
+					lista.remove(j);
+					this.V--;
+					break;
+				}
+			}
 		}
 	}
 //	List<edge> l = convertALtoLL(this.edges); experiment en na t akamo avrio!
@@ -217,6 +298,12 @@ public class Graph {
 	void addEdge(node node1, node node2, double weight) {
 		edge temp = new edge(node1, node2, weight);
 		this.edges.add(temp);
+		this.mst.getTaken().add(false);
+		this.E++;
+	}
+	
+	void addEdge(edge e) {
+		this.edges.add(e);
 		this.mst.getTaken().add(false);
 		this.E++;
 	}
@@ -292,6 +379,24 @@ public class Graph {
             this.edges.set(j + 1, key); 
         } 
     }
+    
+    public  static void insertionSort(ArrayList<edge>newEdges) 
+    { 
+        int n =newEdges.size(); 
+        for (int i = 1; i < n; ++i) { 
+            edge key =newEdges.get(i); 
+            int j = i - 1; 
+  
+            /* Move elements of arr[0..i-1], that are 
+               greater than key, to one position ahead 
+               of their current position */
+            while (j >= 0 &&newEdges.get(j).compareTo(key) > 0) { 
+            	newEdges.set(j + 1,newEdges.get(j)); 
+                j = j - 1; 
+            } 
+           newEdges.set(j + 1, key); 
+        } 
+    }
 
 
 	public edge getEdge(int index) {
@@ -349,19 +454,47 @@ public class Graph {
 
  public static void main(String [] args)
  {
-	 
- Graph grafos= new Graph(3.0);
+ Graph grafos= new Graph(5);
+ 
+ 
 	 grafos.addNode(0, 0, 0, 20);
-	 grafos.addNode(0,1,1,35);
-	 grafos.addNode(2,1,2,50);
-	 grafos.addNode(4,1,3,50);
-	 System.out.print(grafos.toString());
+	 grafos.addNode(4,4,1,35);
+	 grafos.addNode(0,4,2,50);
+	 grafos.addNode(4,0,3,50);
+	 grafos.addNode(2,2,4,43);
+
 	 	
 	 grafos.mst.createMinimumSpanningTree(grafos);
-		 System.out.print(grafos.mst.toString());	
-	grafos.addNodeAdvance(0, 3,5,100);
+	 System.out.print("edo tipono to grafo gia proti fora  \n\n\n");	
 	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia proti fora  \n\n\n");	
+	 System.out.print(grafos.mst.toString());
+	 grafos.removeNode(4);
+	 grafos.mst.recreateMinimumSpanningTree(grafos);
+//	grafos.addNodeAdvance(0, 3,5,100);
+	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
+	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.mst.toString());	
+	 
+	 System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
+	 
+	 grafos.addNodeVersion2(2, 2, 4, 43);
+	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
+	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
+	 System.out.print(grafos.mst.toString());
+	 
+	 grafos.removeNodeVersion2(4);
+	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
+	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
+	 System.out.print(grafos.mst.toString());
+//	 grafos.removeNodeAdvance(5);
+//	 System.out.print("edo tipono to grafo gia meta to addNode advence \n\n\n");	
+//	 System.out.print(grafos.toString());
+//	 System.out.print("edo tipono to mst gia meta to removeNode advence \n\n\n");	
+//	 System.out.print(grafos.mst.toString());	
 
  }
 }

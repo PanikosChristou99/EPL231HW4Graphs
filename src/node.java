@@ -1,4 +1,4 @@
-package src;
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,14 +53,20 @@ public void removeNeigh(neighbour n) {
 
 public double isNeighborPlusD(node n2, double d)
 {
-	double alfa= (this.x-n2.getX())* (this.x-n2.getX());
-	double vita= (this.y-n2.getY())*(this.y-n2.getY());
-	double distance=Math.sqrt(alfa+vita);
+	double distance=findDistance(this, n2);
 	if(distance<=d)
 	{
 		return distance;
 	}
 	return -1;
+}
+
+public static double findDistance(node n1, node n2)
+{
+	double alfa= (n1.x-n2.getX())* (n1.x-n2.getX());
+	double vita= (n1.y-n2.getY())*(n1.y-n2.getY());
+	double distance=Math.sqrt(alfa+vita);
+	return distance;
 }
 
 public int getX() {

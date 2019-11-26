@@ -1,7 +1,3 @@
-package src;
-
-import src.edge;
-import src.node;
 
 public class edge {
 private node n1;
