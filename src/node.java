@@ -41,6 +41,7 @@ public void removeNeigh(neighbour n) {
 	
 	
 }
+
 //
 //public ArrayList<edge> getEdges() {
 //	ArrayList<edge> a = new ArrayList<edge>();

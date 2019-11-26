@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import src.Graph;
+import src.node;
+
 public  class MinimumSpanningTree {
 		private ArrayList<Boolean> taken;
 		private ArrayList<edge>  Medges;
@@ -108,7 +111,7 @@ public  class MinimumSpanningTree {
 				return false;
 		}
 		
-		public void addNodeInMST(node n, Graph grafos, node newNode)
+		public void addNodeInMST(Graph grafos, node newNode)
 		{
 			grafos.getMst().Medges.ensureCapacity(grafos.getMst().Medges.size()+1);
 			grafos.getMst().taken.ensureCapacity(grafos.getE());
@@ -185,6 +188,90 @@ public  class MinimumSpanningTree {
 				{
 					intTemp=i+1;
 					break;
+				}
+			}
+			for(i=intTemp; i<grafos.getE(); i++)
+			{
+				grafos.getMst().taken.set(i, false);
+			}
+		}
+		
+		public void removeNodeInMST(Graph grafos, node toBeRemoved)
+		{
+			int [] TID = new int[grafos.getV()];
+			int count=0;
+			int thesi=0;
+			int intTemp=0;
+			int i=0;
+			for(i=0; i<grafos.getE(); i++)
+			{
+				if(grafos.getEdge(i).isOneOfNodes(toBeRemoved))
+				{
+					intTemp=i;
+					break;
+				}
+				if(grafos.getMst().taken.get(i)==true)
+				{
+					node node1=grafos.getEdges().get(i).getN1();
+					node node2=grafos.getEdges().get(i).getN2();
+					TID[node1.thesiStoPinaka]=100;
+					TID[node2.thesiStoPinaka]=100;
+				}
+			}
+			if(i<grafos.getMst().Medges.size())
+			{
+			grafos.getMst().Medges=(ArrayList<edge>) grafos.getMst().Medges.subList(0, i);
+			}
+			for( i=intTemp ;i<grafos.getE(); i++)
+			{
+				edge temp=grafos.getEdge(i);
+				int index1=temp.getN1().getThesiStoPinaka();
+				int index2= temp.getN2().getThesiStoPinaka();
+				
+				if(temp.isOneOfNodes(toBeRemoved)==true)
+				{
+					//skip
+				}
+				else
+				{
+				if(TID[index1]!=TID[index2])
+				{
+					grafos.getMst().taken.set(i,true);
+					grafos.getMst().Medges.add(temp);
+					thesi++;
+					boolean changeFirst=occurence(TID,index1,index2);
+					if(changeFirst==true)// tuto to occurence maybe en axristo
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index2])
+							{
+								TID[j]=TID[index1];
+								count++;
+							}
+						}
+					}
+					else
+					{
+						for(int j=0;j<TID.length; j++)
+						{
+							if(TID[j]==TID[index1])
+							{
+								TID[j]=TID[index2];
+								count++;
+							}
+						}
+					}
+				}
+				else
+				{
+					grafos.getMst().taken.set(i,false);
+				}
+				if(count==grafos.getV()-1-(1))// to epipleon plin ena ine epd ena fii 1 node
+				{
+					intTemp=i+1;
+					break;
+				}
 				}
 			}
 			for(i=intTemp; i<grafos.getE(); i++)

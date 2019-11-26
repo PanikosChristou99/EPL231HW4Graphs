@@ -35,6 +35,14 @@ public int compareTo(edge kati)
 		return 0;
 	}
 }
+public boolean isOneOfNodes(node n)
+{
+	if((this.getN1().equals(n))||(this.getN2().equals(n)))
+	{
+		return true;
+	}
+	return false;
+}
 
 @Override
 public boolean equals(Object obj) {

@@ -9,7 +9,6 @@ public class Graph {
 
 	static final int sizeOfHashtable = 5;
 	
-
 	private MinimumSpanningTree mst;
 	private int V;
 	private int E;
@@ -138,8 +137,17 @@ public class Graph {
 	public void addNodeAdvance(int x, int y, int id, double t)
 	{
 		node temp=addNode(x,y,id,t);
-		this.mst.addNodeInMST(temp,this,temp);
+		this.mst.addNodeInMST(this,temp);
 	}
+	
+	public void removeNodeAdvance(int id)
+	{
+		node toBeRemoved= search(id);
+		this.mst.removeNodeInMST(this, toBeRemoved);
+		this.removeNode(toBeRemoved);
+	}
+	
+	
 
 
 	public node search(int id) {
