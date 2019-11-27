@@ -61,17 +61,17 @@ public class Graph {
 	{
 		node toBeRemoved= search(id);
 		ArrayList<node> nei= new ArrayList<node>();
-		for(int i=0; i< toBeRemoved.neighbours.size(); i++)
+		for(int i=0; i< toBeRemoved.getNeighbours().size(); i++)
 		{
-			nei.add(toBeRemoved.neighbours.get(i).getN1());
+			nei.add(toBeRemoved.getNeighbours().get(i).getN1());
 		}
 		ArrayList<edge> newEdges = new ArrayList<edge>();
 		for(int i=0; i<nei.size(); i++)
 		{
-			for(int j=0; j<nei.get(i).neighbours.size(); j++)
+			for(int j=0; j<nei.get(i).getNeighbours().size(); j++)
 			{
 				node n1=nei.get(i);
-				node n2=n1.neighbours.get(j).getN1();
+				node n2=n1.getNeighbours().get(j).getN1();
 				if(n2.getId()==toBeRemoved.getId())
 				{
 					//skip
@@ -100,18 +100,19 @@ public class Graph {
 			if (list.isEmpty() == true) {
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				node temp = (node) list.get(j); // etsi exo to kathe v
+			node temp = (node) list.getFirst(); // etsi exo to kathe v
+			while(temp!=null) {
 				double weight = n.isNeighborPlusD(temp, d);
 				if (weight != -1) {
 					neighbour temp2=new neighbour(temp,weight);
-					n.neighbours.add(temp2);
+					n.getNeighbours().add(temp2);
 					temp2=new neighbour(n,weight);
-					temp.neighbours.add(temp2);
+					temp.getNeighbours().add(temp2);
 					edge tempE=new edge(n,temp,weight);
 					addEdge(tempE);
 					array.add(tempE);
 				}
+				temp=temp.getNext();
 			}
 		}
 		return array;
@@ -201,9 +202,11 @@ public class Graph {
 			if (list.isEmpty() == true) {
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getId() == id)
-					return list.get(j);
+			node temp= list.getFirst();
+			while(temp!=null) {
+				if (temp.getId() == id)
+					return temp;
+				temp=temp.getNext();
 			}
 		}
 		return null;
@@ -237,16 +240,30 @@ public class Graph {
 		for(int i=0; i<sizeOfHashtable; i++)
 		{
 			LinkedList lista=this.getHashtable(i);
-			for(int j=0; j<lista.size(); j++)
+			if((lista==null)||(lista.isEmpty()==true))
 			{
-				node temp=(node) lista.get(j);
-				if(temp.getId()==id)
+				continue;
+			}
+			node temp=(node) lista.getFirst();
+			if(temp.getId()==id)
+			{
+				lista.removeFirst();
+				break;
+				// eshi jiali periptosi oi enen?
+			}
+			int counter=1;
+			while(temp.getNext()!=null)
+			{
+				if(temp.getNext().getId()==id)
 				{
-					lista.remove(j);
+					lista.remove(counter);
+					//lista.removeFirstOccurrence(temp.getNext());
+					temp.setNext(temp.getNext().getNext());
 					this.V--;
 					break;
 					
 				}
+				temp=temp.getNext();
 			}
 		}
 	}
@@ -277,15 +294,30 @@ public class Graph {
 		for(int i=0; i<sizeOfHashtable; i++)
 		{
 			LinkedList lista=this.getHashtable(i);
-			for(int j=0; j<lista.size(); j++)
+			if((lista==null)||(lista.isEmpty()==true))
 			{
-				node temp=(node) lista.get(j);
-				if(temp.equals(n))
+				continue;
+			}
+			node temp=(node) lista.getFirst();
+			if(temp.getId()==n.getId())
+			{
+				lista.removeFirst();
+				break;
+				// eshi jiali periptosi oi enen?
+			}
+			int counter=1;
+			while(temp.getNext()!=null)
+			{
+				if(temp.getNext().getId()==n.getId())
 				{
-					lista.remove(j);
+					lista.remove(counter);
+					//lista.removeFirstOccurrence(temp.getNext());
+					temp.setNext(temp.getNext().getNext());
 					this.V--;
 					break;
+					
 				}
+				temp=temp.getNext();
 			}
 		}
 	}
@@ -411,10 +443,12 @@ public class Graph {
 			if (list.isEmpty() == true) {
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				node temp = (node) list.get(j); // etsi exo to kathe v
+			node temp = (node) list.getFirst();
+			while(temp!=null)
+			{
 				s = s + "id " + temp.getId() + "position (" + temp.getX() + "," + temp.getY() + ") temperature "
 						+ temp.getTemp() + "\n";
+				temp=temp.getNext();
 			}
 		}
 		s = s + "these are the edges\n\n";

@@ -27,12 +27,13 @@ public  class MinimumSpanningTree {
 	    		{
 	    			continue;
 	    		}
-	    		for(int j=0; j<list.size(); j++)
-	    		{
-	    			node temp=(node)list.get(j); // etsi exo to kathe v
+    			node temp=(node)list.getFirst();
+    			while(temp!=null)
+    			{
 	    			temp.setThesiStoPinaka(countV);
 	    			TID[countV]=countV;
 	    			countV++;
+	    			temp=temp.getNext();
 	    		}
 	    	}
 			int i=0;
@@ -104,12 +105,13 @@ public  class MinimumSpanningTree {
 	    		{
 	    			continue;
 	    		}
-	    		for(int j=0; j<list.size(); j++)
-	    		{
-	    			node temp=(node)list.get(j); // etsi exo to kathe v
+    			node temp=(node)list.getFirst();
+    			while(temp!=null)
+    			{
 	    			temp.setThesiStoPinaka(countV);
 	    			TID[countV]=countV;
 	    			countV++;
+	    			temp=temp.getNext();
 	    		}
 	    	}
 			int i=0;
@@ -204,12 +206,13 @@ public  class MinimumSpanningTree {
 	    		{
 	    			continue;
 	    		}
-	    		for(int j=0; j<list.size(); j++)
-	    		{
-	    			node temp=(node)list.get(j); // etsi exo to kathe v
+    			node temp=(node)list.getFirst();
+    			while(temp!=null)
+    			{
 	    			temp.setThesiStoPinaka(countV);
 	    			TID[countV]=countV;
 	    			countV++;
+	    			temp=temp.getNext();
 	    		}
 	    	}
 			for(int i=0; i<grafos.getMst().Medges.size(); i++)
@@ -457,12 +460,13 @@ public  class MinimumSpanningTree {
     		{
     			continue;
     		}
-    		for(int j=0; j<list.size(); j++)
-    		{
-    			node temp=(node)list.get(j); // etsi exo to kathe v
+			node temp=(node)list.getFirst();
+			while(temp!=null)
+			{
     			temp.setThesiStoPinaka(countV);
     			TID[countV]=countV;
     			countV++;
+    			temp=temp.getNext();
     		}
     	}
 		for(int i=0; i<grafos.getMst().Medges.size(); i++)
