@@ -133,7 +133,7 @@ public class forest_904311_905811 {
 					if (id1 == id2) {
 						System.out.println("they are the same node");
 					} else
-					removeEdgesAndPrintPath(transferFromAtoB(id1, id2, g), id1);
+			removeEdgesAndPrintPath(forest_904311_905811.transferFromAtoB(id1, id2, grafos), id2,id1);
 					System.out.println();
 					continue;
 				case 7:
