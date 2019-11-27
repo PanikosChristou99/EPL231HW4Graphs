@@ -1,4 +1,5 @@
 
+
 /**main  
  * Reads as first argument d for them being neighbours and a file to read datafrom in the form of
  * 
@@ -104,7 +105,7 @@ public class forest_904311_905811 {
 					int y = in.nextInt();
 					System.out.println("dose m temp :");
 					double t = in.nextDouble();
-					g.addNodeAdvance(x, y, id, t);
+					g.addNodeVersion2(x, y, id, t);
 					System.out.println(g.toString());
 					System.out.println();
 					continue;
@@ -112,7 +113,7 @@ public class forest_904311_905811 {
 				case 4:
 					System.out.println("dose m id :");
 					id = in.nextInt();
-					g.removeNode(id);
+					g.removeNodeVersion2(id);
 					System.out.println(g.toString());
 					System.out.println();
 				case 5:
@@ -271,3 +272,4 @@ public class forest_904311_905811 {
 	}
 
 }
+
