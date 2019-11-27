@@ -67,11 +67,11 @@ public class Graph {
 		ArrayList<edge> newEdges = new ArrayList<edge>();
 		for(int i=0; i<nei.size(); i++)
 		{
+			node n1=nei.get(i);
 			for(int j=0; j<nei.get(i).getNeighbours().size(); j++)
 			{
-				node n1=nei.get(i);
 				node n2=n1.getNeighbours().get(j).getN1();
-				if(n2.getId()==n.getId())
+				if((n2.getId()==n.getId()))
 				{
 					//skip
 				}
@@ -195,11 +195,11 @@ public class Graph {
 		for(int i=0; i<this.getE(); i++)
 		{
 			node temp = null;
-			if(this.edges.get(i).getN1().equals(n))
+			if(this.edges.get(i).getN1().getId()==n.getId())
 			{
 				temp=this.edges.get(i).getN2();
 			}
-			else if(this.edges.get(i).getN2().equals(n))
+			else if(this.edges.get(i).getN2().getId()==n.getId())
 			{
 				temp=this.edges.get(i).getN1();
 			}
@@ -209,7 +209,7 @@ public class Graph {
 			}
 			this.edges.remove(i);
 			this.E--;
-			temp.removeNeighbour(temp);
+			temp.removeNeighbour(n);
 			i=i-1;
 		}
 		for(int i=0; i<sizeOfHashtable; i++)
@@ -236,7 +236,6 @@ public class Graph {
 					temp.setNext(temp.getNext().getNext());
 					this.V--;
 					break;
-					
 				}
 				temp=temp.getNext();
 			}
@@ -430,6 +429,11 @@ public class Graph {
 //	 grafos.addNode(1,2,counterID,43);
 	 counterID++;
 
+		int id1 =4;
+		System.out.println("dose m id2 :");
+		int id2 = 5;
+		//transferFromAtoB(id1, id2, grafos);
+		System.out.println();
 	 	
 	 grafos.mst.createMinimumSpanningTree(grafos);
 	 System.out.print("edo tipono to grafo gia proti fora  \n\n\n");	
@@ -438,18 +442,21 @@ public class Graph {
 	 System.out.print(grafos.mst.toString());
 	 grafos.removeNode(4);
 	 grafos.mst.recreateMinimumSpanningTree(grafos);
+	 System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n\n\n\n\n");	
 	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.toString());
 	 System.out.print("edo tipono to mst gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.mst.toString());
 	 
-	 grafos.addNodeVersion2(2, 2, 4, 43);
+	 grafos.addNode(2, 2, 4, 43);
+	 grafos.mst.recreateMinimumSpanningTree(grafos);
 	 System.out.print("edo tipono to grafo gia meta to addver2 advence \n\n\n");	
 	 System.out.print(grafos.toString());
 	 System.out.print("edo tipono to mst gia meta to addver2 advence \n\n\n");	
 	 System.out.print(grafos.mst.toString());
 //	 
-	 
+ System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
+
 	 grafos.removeNodeVersion2(4);
 	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.toString());
