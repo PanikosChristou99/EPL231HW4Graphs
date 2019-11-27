@@ -1,8 +1,4 @@
-/**an object that is contained in a node that has a pointer to its neighbour node and their distance
- * 
- * @author panikos
- *
- */
+
 public class neighbour {
 private node n1;
 private double weight;
