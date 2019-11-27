@@ -100,7 +100,7 @@ public void removeNeighbour(node n)
 {
 	for(int i=0; i<this.neighbours.size(); i++)
 	{
-		if(this.neighbours.get(i).getN1().equals(n))
+		if(this.neighbours.get(i).getN1().getId()==n.getId())
 		{
 			this.neighbours.remove(i);
 			break;
