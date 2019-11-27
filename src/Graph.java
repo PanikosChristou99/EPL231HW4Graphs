@@ -37,7 +37,7 @@ public class Graph {
 	public void addNodeVersion2(int x, int y, int id, double t)
 	{
 		node temp= new node(x,y,id,t);
-		ArrayList<edge> newEdges= this.findNeighbors(temp);
+		ArrayList<edge> newEdges= this.findNeighbors(temp,false);
 		ArrayList<edge> tempEdges=getNeighborEdges(temp); // pou dame 
 		for(int i=0; i<tempEdges.size(); i++)
 		{
@@ -86,7 +86,7 @@ public class Graph {
 	}
 	
 	
-	public ArrayList<edge> findNeighbors(node n) {
+	public ArrayList<edge> findNeighbors(node n, boolean doYouWantToAddToGraph) {
 		// perno pu oula ta v gia to node ke vrisko kataposo ine gitones
 		// ean ine enimerono ke ta 2 to neightors
 		
@@ -100,12 +100,15 @@ public class Graph {
 			while(temp!=null) {
 				double weight = n.isNeighborPlusD(temp, d);
 				if (weight != -1) {
-					neighbour temp2=new neighbour(temp,weight);
-					n.getNeighbours().add(temp2);
-					temp2=new neighbour(n,weight);
-					temp.getNeighbours().add(temp2);
 					edge tempE=new edge(n,temp,weight);
-					this.addEdge(tempE);
+					if(doYouWantToAddToGraph==true)
+					{
+						neighbour temp2=new neighbour(temp,weight);
+						n.getNeighbours().add(temp2);
+						temp2=new neighbour(n,weight);
+						temp.getNeighbours().add(temp2);
+						this.addEdge(tempE);
+					}
 					array.add(tempE);
 				}
 				temp=temp.getNext();
@@ -114,6 +117,13 @@ public class Graph {
 		return array;
 	}
 	
+//	public void addEdgesToGraph(ArrayList<edge> edges)
+//	{
+//		for(int i=0; i<edges.size(); i++)
+//		{
+//			this.addEdge(edges.get(i));
+//		}
+//	}
 
 	public node addNode(int x, int y, int id, double t) {
 		node temp = new node(x, y, id, t);
@@ -122,7 +132,7 @@ public class Graph {
 
   
 	public node addNode(node temp) {
-		this.findNeighbors(temp);
+		this.findNeighbors(temp, true); // panta true epd dame mia fora en to kamo
 		int index = hashFunction(temp);
 		if(this.hashtable[index].isEmpty()==true)
 		{
@@ -140,19 +150,19 @@ public class Graph {
 	}
 	
 	
-	public void addNodeAdvance(int x, int y, int id, double t)
-	{
-		node temp=addNode(x,y,id,t);
-		this.mst.addNodeInMST(this,temp);
-	}
-	
-	public void removeNodeAdvance(int id)
-	{
-		node toBeRemoved= search(id);
-		this.mst.removeNodeInMST(this, toBeRemoved);
-		this.removeNode(toBeRemoved);
-	}
-	
+//	public void addNodeAdvance(int x, int y, int id, double t)
+//	{
+//		node temp=addNode(x,y,id,t);
+//		this.mst.addNodeInMST(this,temp);
+//	}
+//	
+//	public void removeNodeAdvance(int id)
+//	{
+//		node toBeRemoved= search(id);
+//		this.mst.removeNodeInMST(this, toBeRemoved);
+//		this.removeNode(toBeRemoved);
+//	}
+//	
 	
 
 
@@ -410,6 +420,8 @@ public class Graph {
 	 grafos.addNode(4,0,counterID,50);
 	 counterID++;
 	 grafos.addNode(2,2,counterID,43);
+	 counterID++;
+	 grafos.addNode(2,1,counterID,43);
 //	 counterID++;
 //	 grafos.addNode(1,4,counterID,50);
 //	 counterID++;
@@ -437,6 +449,13 @@ public class Graph {
 	 System.out.print("edo tipono to mst gia meta to addver2 advence \n\n\n");	
 	 System.out.print(grafos.mst.toString());
 //	 
+	 
+	 grafos.removeNodeVersion2(4);
+	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
+	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia meta to recreate advence \n\n\n");	
+	 System.out.print(grafos.mst.toString());
+	 
 //	 System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
 //	 
 //	 grafos.addNodeVersion2(2, 2, 4, 43);
