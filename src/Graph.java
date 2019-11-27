@@ -248,7 +248,6 @@ public class Graph {
 	
 	void addEdge(edge e) {
 		this.edges.add(e);
-		this.mst.getTaken().add(false);
 		this.E++;
 	}
 
