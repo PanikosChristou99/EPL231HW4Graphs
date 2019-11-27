@@ -1,25 +1,23 @@
-/**the node that is in the linked list of the linked list array of our structure
- *  It has an array list of its neighbours and allthe required fields and its id%mod m.
- * 
- * 
- * @author panikos
- *
- */
+
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
-
 
 public class node {
 private int x;
 private int y;
 private int id;
 private double temp;
-ArrayList<neighbour> neighbours;
+private ArrayList<neighbour> neighbours;
 int thesiStoPinaka;
+private node next;
 
- public int getThesiStoPinaka() {
+ public node getNext() {
+	return next;
+}
+public void setNext(node next) {
+	this.next = next;
+}
+public int getThesiStoPinaka() {
 	return thesiStoPinaka;
 }
 public void setThesiStoPinaka(int thesiStoPinaka) {
@@ -32,10 +30,10 @@ public node(int x, int y, int id,double temp) {
 	 this.id =id;
 	 this.temp =temp;
 	 this.neighbours = new ArrayList<neighbour>();
+	 this.next=null;
 }
 public void addNeigb(neighbour n) {
 	this.neighbours.add(n);
-	
 }
 public void removeNeigh(neighbour n) {
 	for (int i = 0; i < neighbours.size(); i++) {
@@ -44,8 +42,6 @@ public void removeNeigh(neighbour n) {
 			break;
 		}
 	}
-	
-	
 }
 
 //
@@ -146,7 +142,8 @@ public void setNeighbours(ArrayList<neighbour> neighbours) {
 }
 @Override
 public String toString() {
-	return id + "\t(" + x+","+y+")\t"+temp;
+	return "node [x=" + x + ", y=" + y + ", id=" + id + ", temp=" + temp + ", neighbours=" + neighbours
+			+ ", thesiStoPinaka=" + thesiStoPinaka + "]";
 }
 
 }
