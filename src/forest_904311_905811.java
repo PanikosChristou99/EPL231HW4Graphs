@@ -178,19 +178,23 @@ public class forest_904311_905811 {
  * @param arE
  * @param idA
  */
-	public static void removeEdgesAndPrintPath(ArrayDeque<edge> arE, int idA) {
-
+	public static void removeEdgesAndPrintPath(ArrayDeque<edge> arE, int idA,int idB) {
+		
 		ArrayDeque<Integer> ar = new ArrayDeque<Integer>();
 		edge e = arE.pop();
 		node other = returnOtherNode(e, idA);
-		node want = returnOtherNode(e, idA);
+		node want = returnOtherNode(e, other.getId());
 		double temp = want.getTemp();
 		ar.push(other.getId());
 		while (!arE.isEmpty()) {
 			e = arE.pop();
-			other = returnOtherNode(e, idA);
+			other = returnOtherNode(e, other.getId());
 			ar.push(other.getId());
+			if(arE.isEmpty()) {
+				ar.add(idB);
+			}
 		}
+		
 		System.out.println("the path is : \n");
 		while (!ar.isEmpty()) {
 			System.out.println(ar.pop().toString() + "\n");
@@ -213,9 +217,12 @@ public class forest_904311_905811 {
  * @return
  */
 	public static ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
-		
+		boolean[] taken = new boolean[g.getMst().getMedges().size()];
+		for (int i = 0; i <taken.length; i++) {
+			taken[i] = false;
+		}
 		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
-		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
+		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g, taken);
 		ArrayDeque<edge> temp = new ArrayDeque<edge>();
 		for (int i = 0; i < e.size(); i++) {
 			temp = new ArrayDeque<edge>();
@@ -224,13 +231,13 @@ public class forest_904311_905811 {
 		}
 		while (!q.isEmpty()) {
 			temp = q.remove();
-			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
+			if (temp.getLast().getN1().getId() == idB || temp.getLast().getN2().getId() == idB) {
 				return temp;
 
 			}
-			e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
+			e = searchThroughEdgesForMatch(temp.getLast().getN1().getId(), g,taken);
 
-			ArrayList<edge> e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
+			ArrayList<edge> e2 = searchThroughEdgesForMatch(temp.getLast().getN2().getId(), g, taken);
 
 			e.addAll(e2);
 
@@ -251,13 +258,10 @@ public class forest_904311_905811 {
 	 * 
 	 * @param idA
 	 * @param g
+	 * @param taken 
 	 * @return
 	 */
-	public static ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
-		boolean[] taken = new boolean[g.getMst().getMedges().size()];
-		for (int i = 0; i <taken.length; i++) {
-			taken[i] = false;
-		}
+	public static ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g, boolean[] taken) {
 		ArrayList<edge> e = new ArrayList<edge>();
 		for (int i = 0; i < g.getMst().getMedges().size(); i++) {
 			if (!taken[i]) {
@@ -272,4 +276,6 @@ public class forest_904311_905811 {
 	}
 
 }
+
+
 
