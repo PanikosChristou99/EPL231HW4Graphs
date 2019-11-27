@@ -193,6 +193,7 @@ public  class MinimumSpanningTree {
 		}
 		public void addNodeInMSTVersion2(node n,Graph grafos,ArrayList<edge> newEdges)
 		{
+			newEdges.addAll(grafos.getMst().getMedges());
 			grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1);
 //			grafos.getMst().taken= new ArrayList<Boolean>();
 //			for(int i=0; i<grafos.getE(); i++)
@@ -219,10 +220,10 @@ public  class MinimumSpanningTree {
 	    			temp=temp.getNext();
 	    		}
 	    	}
-			for(int i=0; i<grafos.getMst().Medges.size(); i++)
-			{
-				newEdges.add(grafos.getMst().getMedge(i));
-			}
+//			for(int i=0; i<grafos.getMst().Medges.size(); i++)
+//			{
+//				newEdges.add(grafos.getMst().getMedge(i));
+//			}
 			Graph.insertionSort(newEdges);
 			int i=0;
 //			for(int j=i; j<grafos.getE();j++)
@@ -458,6 +459,7 @@ public  class MinimumSpanningTree {
 		
 		public void removeNodeInMSTVersion2(node n, Graph grafos,ArrayList<edge>newEdges )
 		{
+		newEdges.addAll(grafos.getMst().getMedges());
 		grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1-(1));
 		int [] TID = new int[grafos.getV()];
 		int count=0;
