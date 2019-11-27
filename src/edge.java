@@ -1,4 +1,9 @@
-
+/**an object htat has a pointer to 2 nodes and an int that represent as its name and edge of a graph
+ * we ude it in the mst to help with kruskal
+ * 
+ * @author panikos
+ *
+ */
 public class edge {
 private node n1;
 private node n2;
