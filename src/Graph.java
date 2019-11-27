@@ -5,8 +5,6 @@ import java.util.List;
 
 public class Graph {
 	
-	
-
 	static final int sizeOfHashtable = 5;
 	
 	private MinimumSpanningTree mst;
@@ -21,7 +19,6 @@ public class Graph {
 		this.d = d;
 		this.V=0;
 		this.E=0;
-
 		// define the size of array as
 		// number of vertices
 		this.hashtable = new LinkedList[sizeOfHashtable];
@@ -35,23 +32,18 @@ public class Graph {
 		this.mst=new MinimumSpanningTree(); ;
 	}
 
-	private static int hashFunction(node n) {
-		int temp = n.getId() % sizeOfHashtable;
-		return temp;
-	}
-	
-	public MinimumSpanningTree getMst() {
-		return mst;
-	}
 
-	public void setMst(MinimumSpanningTree mst) {
-		this.mst = mst;
-	}
 	
 	public void addNodeVersion2(int x, int y, int id, double t)
 	{
 		node temp= new node(x,y,id,t);
 		ArrayList<edge> newEdges= this.findNeighbors(temp);
+		ArrayList<edge> tempEdges=getNeighborEdges(temp); // pou dame 
+		for(int i=0; i<tempEdges.size(); i++)
+		{
+			newEdges.add(tempEdges.get(i));
+		}
+		//os dame maybe ene toso xrisima
 		this.addNode(temp);
 		this.insertionSort();
 		this.mst.addNodeInMSTVersion2(temp,this, newEdges);
@@ -60,10 +52,17 @@ public class Graph {
 	public void removeNodeVersion2(int id)
 	{
 		node toBeRemoved= search(id);
+		ArrayList<edge> newEdges=getNeighborEdges(toBeRemoved);
+		this.mst.removeNodeInMSTVersion2( toBeRemoved,this, newEdges);
+		this.removeNode(toBeRemoved);
+	}
+	
+	public static  ArrayList<edge> getNeighborEdges(node n )
+	{
 		ArrayList<node> nei= new ArrayList<node>();
-		for(int i=0; i< toBeRemoved.getNeighbours().size(); i++)
+		for(int i=0; i< n.getNeighbours().size(); i++)
 		{
-			nei.add(toBeRemoved.getNeighbours().get(i).getN1());
+			nei.add(n.getNeighbours().get(i).getN1());
 		}
 		ArrayList<edge> newEdges = new ArrayList<edge>();
 		for(int i=0; i<nei.size(); i++)
@@ -72,7 +71,7 @@ public class Graph {
 			{
 				node n1=nei.get(i);
 				node n2=n1.getNeighbours().get(j).getN1();
-				if(n2.getId()==toBeRemoved.getId())
+				if(n2.getId()==n.getId())
 				{
 					//skip
 				}
@@ -83,11 +82,8 @@ public class Graph {
 				}
 			}
 		}
-		
-		this.mst.removeNodeInMSTVersion2( toBeRemoved,this, newEdges);
-		this.removeNode(toBeRemoved);
+		return newEdges;
 	}
-
 	
 	
 	public ArrayList<edge> findNeighbors(node n) {
@@ -109,7 +105,7 @@ public class Graph {
 					temp2=new neighbour(n,weight);
 					temp.getNeighbours().add(temp2);
 					edge tempE=new edge(n,temp,weight);
-					addEdge(tempE);
+					this.addEdge(tempE);
 					array.add(tempE);
 				}
 				temp=temp.getNext();
@@ -118,52 +114,16 @@ public class Graph {
 		return array;
 	}
 	
-	public LinkedList<node>[] getHashtable() {
-		return hashtable;
-	}
-
-	public LinkedList<node> getHashtable(int index) {
-		return hashtable[index];
-	}
-
-	public void setHashtable(LinkedList<node>[] hashtable) {
-		this.hashtable = hashtable;
-	}
-
-	public ArrayList<edge> getEdges() {
-		return edges;
-	}
-
-	public void setEdges(ArrayList<edge> edges) {
-		this.edges = edges;
-	}
-
-	public double getD() {
-		return d;
-	}
-
-	
-	public void setD(double d) {
-		this.d = d;
-	}
-
-	public static int getSizeofhashtable() {
-		return sizeOfHashtable;
-	}
-
-	public void setV(int v) {
-		V = v;
-	}
-
-	public void setE(int e) {
-		E = e;
-	}
 
 	public node addNode(int x, int y, int id, double t) {
 		node temp = new node(x, y, id, t);
+		return this.addNode(temp);
+	}
+
+  
+	public node addNode(node temp) {
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
-
 		if(this.hashtable[index].isEmpty()==true)
 		{
 			//skipp
@@ -173,20 +133,9 @@ public class Graph {
 			node prevLast=this.hashtable[index].getLast();
 			prevLast.setNext(temp);
 		}
-		
 		this.hashtable[index].add(temp);
 		this.V++;
 		this.insertionSort();
-		return temp;
-	}
-
-  
-    
-	public node addNode(node temp) {
-		this.findNeighbors(temp);
-		int index = hashFunction(temp);
-		this.hashtable[index].add(temp);
-		this.V++;
 		return temp;
 	}
 	
@@ -226,57 +175,8 @@ public class Graph {
 	
 	/* check if i missed to remove something   */
 	public void removeNode(int id) {
-		
-		// if it exists panta.
-		for(int i=0; i<this.getE(); i++)
-		{
-			node temp = null;
-			if(this.edges.get(i).getN1().getId()==id)
-			{
-				temp=this.edges.get(i).getN2();
-			}
-			else if(this.edges.get(i).getN2().getId()==id)
-			{
-				temp=this.edges.get(i).getN1();
-			}
-			if(temp==null)
-			{
-				continue;
-			}
-			this.edges.remove(i);
-			this.E--;
-			temp.removeNeighbour(temp);
-			i=i-1;
-		}
-		for(int i=0; i<sizeOfHashtable; i++)
-		{
-			LinkedList lista=this.getHashtable(i);
-			if((lista==null)||(lista.isEmpty()==true))
-			{
-				continue;
-			}
-			node temp=(node) lista.getFirst();
-			if(temp.getId()==id)
-			{
-				lista.removeFirst();
-				break;
-				// eshi jiali periptosi oi enen?
-			}
-			int counter=1;
-			while(temp.getNext()!=null)
-			{
-				if(temp.getNext().getId()==id)
-				{
-					lista.remove(counter);
-					//lista.removeFirstOccurrence(temp.getNext());
-					temp.setNext(temp.getNext().getNext());
-					this.V--;
-					break;
-					
-				}
-				temp=temp.getNext();
-			}
-		}
+		node n=search(id);
+		this.removeNode(n);
 	}
 
 	public void removeNode(node n) {
@@ -332,17 +232,9 @@ public class Graph {
 			}
 		}
 	}
-//	List<edge> l = convertALtoLL(this.edges); experiment en na t akamo avrio!
-	
-//	for (edge tempEdge : l) {
-//		if(tempEdge.getWeight()>=temp.w)
-//	}
-	// Adds an edge to an undirected graph
 	void addEdge(node node1, node node2, double weight) {
 		edge temp = new edge(node1, node2, weight);
-		this.edges.add(temp);
-		this.mst.getTaken().add(false);
-		this.E++;
+		this.addEdge(temp);
 	}
 	
 	void addEdge(edge e) {
@@ -350,59 +242,7 @@ public class Graph {
 		this.mst.getTaken().add(false);
 		this.E++;
 	}
-	
-	public int getV() {
-		return this.V;
-	}
 
-	public int getE() {
-		return this.E;
-	}
-
-	/*
-	 * This function takes last element as pivot, places the pivot element at its
-	 * correct position in sorted array, and places all smaller (smaller than pivot)
-	 * to left of pivot and all greater elements to right of pivot
-	 */
-	int partition(int low, int high) {
-		edge pivot = this.edges.get(high);
-		int i = (low - 1); // index of smaller element
-		for (int j = low; j < high; j++) {
-			// If current element is smaller than or
-			// equal to pivot
-			if (this.edges.get(j).compareTo(pivot) <= 0) {
-				i++;
-				// swap arr[i] and arr[j]
-				edge temp = this.edges.get(i);
-				this.edges.set(i, this.edges.get(j));
-				this.edges.set(j, temp);
-			}
-		}
-
-		// swap arr[i+1] and arr[high] (or pivot)
-		edge temp = this.edges.get(i + 1);
-		this.edges.set(i + 1, this.edges.get(high));
-		this.edges.set(high, temp);
-		return i + 1;
-	}
-	
-	/*
-	 * The main function that implements QuickSort() arr[] --> Array to be sorted,
-	 * low --> Starting index, high --> Ending index
-	 */
-	void quicksort(int low, int high) {
-		if (low < high) {
-			/*
-			 * pi is partitioning index, arr[pi] is now at right place
-			 */
-			int pi = partition(low, high);
-
-			// Recursively sort elements before
-			// partition and after partition
-			quicksort(low, pi - 1);
-			quicksort(pi + 1, high);
-		}
-	}
 	
     /*Function to sort array using insertion sort*/
     void insertionSort() 
@@ -496,10 +336,69 @@ public class Graph {
 		node n = search(id);
 		n.setTemp(temp);
 	}
+	public LinkedList<node>[] getHashtable() {
+		return hashtable;
+	}
+
+	public LinkedList<node> getHashtable(int index) {
+		return hashtable[index];
+	}
+
+	public void setHashtable(LinkedList<node>[] hashtable) {
+		this.hashtable = hashtable;
+	}
+
+	public ArrayList<edge> getEdges() {
+		return edges;
+	}
+
+	public void setEdges(ArrayList<edge> edges) {
+		this.edges = edges;
+	}
+
+	public double getD() {
+		return d;
+	}
+
+	
+	public void setD(double d) {
+		this.d = d;
+	}
+
+	public static int getSizeofhashtable() {
+		return sizeOfHashtable;
+	}
+
+	public void setV(int v) {
+		V = v;
+	}
+
+	public void setE(int e) {
+		E = e;
+	}
+	private static int hashFunction(node n) {
+		int temp = n.getId() % sizeOfHashtable;
+		return temp;
+	}
+	
+	public MinimumSpanningTree getMst() {
+		return mst;
+	}
+
+	public void setMst(MinimumSpanningTree mst) {
+		this.mst = mst;
+	}
+	public int getV() {
+		return this.V;
+	}
+
+	public int getE() {
+		return this.E;
+	}
 
  public static void main(String [] args)
  {
- Graph grafos= new Graph(10);
+ Graph grafos= new Graph(4);
  
  int counterID=0;
 	 grafos.addNode(0, 0, counterID, 20);
@@ -511,12 +410,12 @@ public class Graph {
 	 grafos.addNode(4,0,counterID,50);
 	 counterID++;
 	 grafos.addNode(2,2,counterID,43);
-	 counterID++;
-	 grafos.addNode(1,4,counterID,50);
-	 counterID++;
-	 grafos.addNode(1,0,counterID,50);
-	 counterID++;
-	 grafos.addNode(1,2,counterID,43);
+//	 counterID++;
+//	 grafos.addNode(1,4,counterID,50);
+//	 counterID++;
+//	 grafos.addNode(1,0,counterID,50);
+//	 counterID++;
+//	 grafos.addNode(1,2,counterID,43);
 	 counterID++;
 
 	 	
@@ -527,11 +426,16 @@ public class Graph {
 	 System.out.print(grafos.mst.toString());
 	 grafos.removeNode(4);
 	 grafos.mst.recreateMinimumSpanningTree(grafos);
-////	grafos.addNodeAdvance(0, 3,5,100);
 	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.toString());
 	 System.out.print("edo tipono to mst gia meta to recreate advence \n\n\n");	
-	 System.out.print(grafos.mst.toString());	
+	 System.out.print(grafos.mst.toString());
+	 
+	 grafos.addNodeVersion2(2, 2, 4, 43);
+	 System.out.print("edo tipono to grafo gia meta to addver2 advence \n\n\n");	
+	 System.out.print(grafos.toString());
+	 System.out.print("edo tipono to mst gia meta to addver2 advence \n\n\n");	
+	 System.out.print(grafos.mst.toString());
 //	 
 //	 System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
 //	 
