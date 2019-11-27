@@ -54,9 +54,10 @@ public  class MinimumSpanningTree {
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
 					{
+						int tempI=TID[index2];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index2])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index1];
 								count++;
@@ -65,9 +66,10 @@ public  class MinimumSpanningTree {
 					}
 					else
 					{
+						int tempI=TID[index1];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index1])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index2];
 								count++;
@@ -132,9 +134,10 @@ public  class MinimumSpanningTree {
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
 					{
+						int tempI=TID[index2];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index2])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index1];
 								count++;
@@ -143,9 +146,10 @@ public  class MinimumSpanningTree {
 					}
 					else
 					{
+						int tempI=TID[index1];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index1])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index2];
 								count++;
@@ -157,10 +161,10 @@ public  class MinimumSpanningTree {
 				{
 					grafos.getMst().taken.set(i, false);
 				}
-				if(count==grafos.getV())
-				{
-					break;
-				}
+//				if(count==grafos.getV())
+//				{
+//					break;
+//				}
 			}
 		}
 		
@@ -238,9 +242,10 @@ public  class MinimumSpanningTree {
 					boolean changeFirst=occurence(TID,index1,index2);
 					if(changeFirst==true)
 					{
+						int tempI=TID[index2];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index2])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index1];
 								count++;
@@ -249,9 +254,10 @@ public  class MinimumSpanningTree {
 					}
 					else
 					{
+						int tempI=TID[index1];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index1])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index2];
 								count++;
@@ -317,11 +323,12 @@ public  class MinimumSpanningTree {
 					grafos.getMst().Medges.add(temp);
 					thesi++;
 					boolean changeFirst=occurence(TID,index1,index2);
-					if(changeFirst==true)// tuto to occurence maybe en axristo
+					if(changeFirst==true)
 					{
+						int tempI=TID[index2];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index2])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index1];
 								count++;
@@ -330,9 +337,10 @@ public  class MinimumSpanningTree {
 					}
 					else
 					{
+						int tempI=TID[index1];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index1])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index2];
 								count++;
@@ -406,11 +414,12 @@ public  class MinimumSpanningTree {
 					grafos.getMst().Medges.add(temp);
 					thesi++;
 					boolean changeFirst=occurence(TID,index1,index2);
-					if(changeFirst==true)// tuto to occurence maybe en axristo
+					if(changeFirst==true)
 					{
+						int tempI=TID[index2];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index2])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index1];
 								count++;
@@ -419,9 +428,10 @@ public  class MinimumSpanningTree {
 					}
 					else
 					{
+						int tempI=TID[index1];
 						for(int j=0;j<TID.length; j++)
 						{
-							if(TID[j]==TID[index1])
+							if(TID[j]==tempI)
 							{
 								TID[j]=TID[index2];
 								count++;
@@ -496,9 +506,10 @@ public  class MinimumSpanningTree {
 				boolean changeFirst=occurence(TID,index1,index2);
 				if(changeFirst==true)
 				{
+					int tempI=TID[index2];
 					for(int j=0;j<TID.length; j++)
 					{
-						if(TID[j]==TID[index2])
+						if(TID[j]==tempI)
 						{
 							TID[j]=TID[index1];
 							count++;
@@ -507,9 +518,10 @@ public  class MinimumSpanningTree {
 				}
 				else
 				{
+					int tempI=TID[index1];
 					for(int j=0;j<TID.length; j++)
 					{
-						if(TID[j]==TID[index1])
+						if(TID[j]==tempI)
 						{
 							TID[j]=TID[index2];
 							count++;

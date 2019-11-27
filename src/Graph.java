@@ -29,7 +29,7 @@ public class Graph {
 		// Create a new list for each vertex
 		// such that adjacent nodes can be stored
 		for (int i = 0; i < sizeOfHashtable; i++) {
-			hashtable[i] = new LinkedList<>();
+			hashtable[i] = new LinkedList<node>();
 		}
 		this.edges = new ArrayList<edge>();
 		this.mst=new MinimumSpanningTree(); ;
@@ -163,6 +163,17 @@ public class Graph {
 		node temp = new node(x, y, id, t);
 		this.findNeighbors(temp);
 		int index = hashFunction(temp);
+
+		if(this.hashtable[index].isEmpty()==true)
+		{
+			//skipp
+		}
+		else
+		{
+			node prevLast=this.hashtable[index].getLast();
+			prevLast.setNext(temp);
+		}
+		
 		this.hashtable[index].add(temp);
 		this.V++;
 		this.insertionSort();
@@ -488,14 +499,25 @@ public class Graph {
 
  public static void main(String [] args)
  {
- Graph grafos= new Graph(5);
+ Graph grafos= new Graph(10);
  
- 
-	 grafos.addNode(0, 0, 0, 20);
-	 grafos.addNode(4,4,1,35);
-	 grafos.addNode(0,4,2,50);
-	 grafos.addNode(4,0,3,50);
-	 grafos.addNode(2,2,4,43);
+ int counterID=0;
+	 grafos.addNode(0, 0, counterID, 20);
+	 counterID++;
+	 grafos.addNode(4,4,counterID,35);
+	 counterID++;
+	 grafos.addNode(0,4,counterID,50);
+	 counterID++;
+	 grafos.addNode(4,0,counterID,50);
+	 counterID++;
+	 grafos.addNode(2,2,counterID,43);
+	 counterID++;
+	 grafos.addNode(1,4,counterID,50);
+	 counterID++;
+	 grafos.addNode(1,0,counterID,50);
+	 counterID++;
+	 grafos.addNode(1,2,counterID,43);
+	 counterID++;
 
 	 	
 	 grafos.mst.createMinimumSpanningTree(grafos);
@@ -505,25 +527,25 @@ public class Graph {
 	 System.out.print(grafos.mst.toString());
 	 grafos.removeNode(4);
 	 grafos.mst.recreateMinimumSpanningTree(grafos);
-//	grafos.addNodeAdvance(0, 3,5,100);
+////	grafos.addNodeAdvance(0, 3,5,100);
 	 System.out.print("edo tipono to grafo gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.toString());
 	 System.out.print("edo tipono to mst gia meta to recreate advence \n\n\n");	
 	 System.out.print(grafos.mst.toString());	
-	 
-	 System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
-	 
-	 grafos.addNodeVersion2(2, 2, 4, 43);
-	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
-	 System.out.print(grafos.toString());
-	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
-	 System.out.print(grafos.mst.toString());
-	 
-	 grafos.removeNodeVersion2(4);
-	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
-	 System.out.print(grafos.toString());
-	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
-	 System.out.print(grafos.mst.toString());
+//	 
+//	 System.out.print("lets clear some place\n\n\n\n\n\n\n\n\n\n");	
+//	 
+//	 grafos.addNodeVersion2(2, 2, 4, 43);
+//	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
+//	 System.out.print(grafos.toString());
+//	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
+//	 System.out.print(grafos.mst.toString());
+//	 
+//	 grafos.removeNodeVersion2(4);
+//	 System.out.print("edo tipono to grafo gia meta to new version add advence \n\n\n");	
+//	 System.out.print(grafos.toString());
+//	 System.out.print("edo tipono to mst gia meta to new version add advence \n\n\n");	
+//	 System.out.print(grafos.mst.toString());
 //	 grafos.removeNodeAdvance(5);
 //	 System.out.print("edo tipono to grafo gia meta to addNode advence \n\n\n");	
 //	 System.out.print(grafos.toString());
