@@ -1,13 +1,13 @@
 
-/**main 
+/**main  
  * Reads as first argument d for them being neighbours and a file to read datafrom in the form of
  * 
-1	(42,5)	30.0
-821	(153,6)	25.0
-2	(190,0)	30.0
-12	(48,5)	58.0
-123	(210,0)	32.0
-353	(12,45)	28.0
+01	(42, 85)	30
+123	(210, 50)	32
+353	(12, 345)	28
+02	(190, 300)	30
+12	(48, 105)	58
+821	(153, 46)	25
 *
 *When the user decides to exit it write back to the file the new nodes
  */
@@ -168,7 +168,15 @@ public class forest_904311_905811 {
 		}
 		out.close();
 	}
-
+/** Gets a stack(double ended queue) of edges as the path it found from b to a and prints them in the correct order
+ * 
+ * note that ends are not sorted nodes so we start from the last edge and find the node that was the previous to last
+ * to then find on the previous to last edgethe other node that previous to the previous to the end etc etc.
+ * So we make a path of nodes using the edges and only the final destination
+ * 
+ * @param arE
+ * @param idA
+ */
 	public static void removeEdgesAndPrintPath(ArrayDeque<edge> arE, int idA) {
 
 		ArrayDeque<Integer> ar = new ArrayDeque<Integer>();
@@ -195,7 +203,14 @@ public class forest_904311_905811 {
 		else
 			return e.getN1();
 	}
-
+/** Using a queue<stacks> we and doing a bfs method we traverse the mnimum spanning tree to eventually reach 
+ * our target node and return the path
+ * 
+ * @param idA
+ * @param idB
+ * @param g
+ * @return
+ */
 	public static ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
 		
 		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
@@ -209,10 +224,6 @@ public class forest_904311_905811 {
 		while (!q.isEmpty()) {
 			temp = q.remove();
 			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
-
-				for (int i = 0; i < g.getMst().getMedges().size(); i++) {
-					g.getMst().getTaken().set(i, false);
-				}
 				return temp;
 
 			}
@@ -228,23 +239,30 @@ public class forest_904311_905811 {
 				q.add(temp2);
 			}
 		}
-		for (int i = 0; i < g.getMst().getMedges().size(); i++) {
-			g.getMst().getTaken().set(i, false);
-		}
 		return null;
 	}
 
 	public static boolean containsNode(int idA, edge e) {
 		return e.getN1().getId() == idA || e.getN2().getId() == idA;
 	}
-
+	/**search through the edges of the existing mst to help the above functions not use again 
+	 * an edge and fall on a loop
+	 * 
+	 * @param idA
+	 * @param g
+	 * @return
+	 */
 	public static ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
+		boolean[] taken = new boolean[g.getMst().getMedges().size()];
+		for (int i = 0; i <taken.length; i++) {
+			taken[i] = false;
+		}
 		ArrayList<edge> e = new ArrayList<edge>();
 		for (int i = 0; i < g.getMst().getMedges().size(); i++) {
-			if (!g.getMst().getTaken().get(i)) {
+			if (!taken[i]) {
 				if (containsNode(idA, g.getMst().getMedges().get(i))) {
 					e.add(g.getMst().getMedges().get(i));
-					g.getMst().getTaken().set(i, true);
+					taken[i] = true;
 				}
 			}
 		}
