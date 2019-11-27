@@ -14,7 +14,7 @@ public  class MinimumSpanningTree {
 
 		public void createMinimumSpanningTree (Graph grafos )
 		{
-		       //grafos.quicksort(0,grafos.getE()-1);/// prob tuto theli svisimo
+		   //  grafos.insertionSort();/// prob tuto theli svisimo
 			grafos.getMst().Medges= new ArrayList<edge>(grafos.getV()-1);
 			int [] TID = new int[grafos.getV()];
 			int count=0;
