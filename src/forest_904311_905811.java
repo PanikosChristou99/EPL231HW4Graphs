@@ -1,5 +1,16 @@
 
-
+/**main 
+ * Reads as first argument d for them being neighbours and a file to read datafrom in the form of
+ * 
+1	(42,5)	30.0
+821	(153,6)	25.0
+2	(190,0)	30.0
+12	(48,5)	58.0
+123	(210,0)	32.0
+353	(12,45)	28.0
+*
+*When the user decides to exit it write back to the file the new nodes
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,11 +26,12 @@ import java.util.Stack;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class forest_904311_905811 {
 
 	public static void main(String[] args) throws IOException {
-		if (args.length !=2) {
+		if (args.length != 2) {
 			System.out.println("en evales 2 arguments bye");
 			System.exit(0);
 
@@ -35,13 +47,12 @@ public class forest_904311_905811 {
 			while (sc.hasNextLine()) {// insert the dictionary to the trie
 				String str = sc.nextLine();
 				int x = Integer.parseInt(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
-				int y = Integer.parseInt(str.substring(str.indexOf(",") + 2, str.indexOf(")")));
-				int id = Integer.parseInt(str.substring(0, str.indexOf("(")-1));
-				int temp = Integer.parseInt(str.substring(str.indexOf(")") + 2, str.length()));
-				System.out.println(x + y+  id +temp );
-				g.addNodeAdvance(x, y, id, temp);
-				
-				
+				int y = Integer.parseInt(str.substring(str.indexOf(",") + 1, str.indexOf(")")));
+				int id = Integer.parseInt(str.substring(0, str.indexOf("(") - 1));
+				Double temp = Double.parseDouble(str.substring(str.indexOf(")") + 2, str.length()));
+				System.out.println(x + y + id + temp);
+				g.addNode(x, y, id, temp);
+
 			}
 
 //			long endTime = System.currentTimeMillis();
@@ -50,14 +61,15 @@ public class forest_904311_905811 {
 //			System.out.println("i used " + actualMemUsed + " bytes for the 904311_trie");
 //			System.out.println("\nIt took me  " + (endTime - startTime) + " ms to build the 904311_trie");
 			sc.close();
+			
 		} catch (
 
 		FileNotFoundException e) {
 			System.out.println("i couldnt find the file");
 			System.exit(0);
 		}
-System.out.println(g.toString());
-g.getMst().createMinimumSpanningTree(g);
+		System.out.println(g.toString());
+		g.getMst().createMinimumSpanningTree(g);
 		int option = 1;
 		Scanner in = new Scanner(System.in);
 
@@ -75,7 +87,7 @@ g.getMst().createMinimumSpanningTree(g);
 				option = in.nextInt();
 				switch (option) {
 				case 1:
-					g.getMst().createMinimumSpanningTree(g);
+					g.getMst().recreateMinimumSpanningTree(g);
 					System.out.println();
 					continue;
 				case 2:
@@ -117,7 +129,10 @@ g.getMst().createMinimumSpanningTree(g);
 					int id1 = in.nextInt();
 					System.out.println("dose m id2 :");
 					int id2 = in.nextInt();
-					removeEdgesAndPrintPath(transferFromAtoB(id1, id2, g),id1);
+					if (id1 == id2) {
+						System.out.println("they are the same node");
+					} else
+					removeEdgesAndPrintPath(transferFromAtoB(id1, id2, g), id1);
 					System.out.println();
 					continue;
 				case 7:
@@ -141,55 +156,52 @@ g.getMst().createMinimumSpanningTree(g);
 		}
 
 		File file = new File(args[1]);
-		 BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		for (int i = 0; i < g.getHashtable().length; i++) {
-			LinkedList<node> list = g.getHashtable(i);
-			if (list.isEmpty() == true) {
+			System.out.println(g.getHashtable(i));
+			if (g.getHashtable(i).isEmpty() == true) {
 				continue;
 			}
-			for (int j = 0; j < list.size(); j++) {
-				try {
-					writer.write(list.get(j).toString() + '\n');
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-
-				}
+			for (int j = 0; j < g.getHashtable(i).size(); j++) {
+				out.write(g.getHashtable(i).get(j).toString()+"\n");
 			}
 		}
+		out.close();
 	}
-	public static void removeEdgesAndPrintPath(ArrayDeque<edge> arE,int idA) {
-		
-		ArrayDeque<Integer> ar = new  ArrayDeque<Integer>();
+
+	public static void removeEdgesAndPrintPath(ArrayDeque<edge> arE, int idA) {
+
+		ArrayDeque<Integer> ar = new ArrayDeque<Integer>();
 		edge e = arE.pop();
-		node other = returnOtherNode(e,idA);
-		node want = returnOtherNode(e,idA);
-		double  temp = want.getTemp();
+		node other = returnOtherNode(e, idA);
+		node want = returnOtherNode(e, idA);
+		double temp = want.getTemp();
 		ar.push(other.getId());
-		while(!arE.isEmpty()) {
-			 e = arE.pop();
-			 other = returnOtherNode(e,idA);
-			 ar.push(other.getId());
+		while (!arE.isEmpty()) {
+			e = arE.pop();
+			other = returnOtherNode(e, idA);
+			ar.push(other.getId());
 		}
 		System.out.println("the path is : \n");
 		while (!ar.isEmpty()) {
-			System.out.println(ar.pop().toString()+"\n");
+			System.out.println(ar.pop().toString() + "\n");
 		}
 		System.out.println("and the temp of what you wanted is : " + temp);
 	}
-	public static node returnOtherNode(edge e,int idA) {
-	if(e.getN1().getId()==idA) return e.getN2();
-	else return e.getN1();
+
+	public static node returnOtherNode(edge e, int idA) {
+		if (e.getN1().getId() == idA)
+			return e.getN2();
+		else
+			return e.getN1();
 	}
+
 	public static ArrayDeque<edge> transferFromAtoB(int idA, int idB, Graph g) {
-		if (idA == idB) {
-			System.out.println("they are the same node");
-			return null;
-		}
+		
 		Queue<ArrayDeque<edge>> q = new LinkedList<ArrayDeque<edge>>();
 		ArrayList<edge> e = searchThroughEdgesForMatch(idA, g);
 		ArrayDeque<edge> temp = new ArrayDeque<edge>();
-		for (int i = 0; i <e.size(); i++) {
+		for (int i = 0; i < e.size(); i++) {
 			temp = new ArrayDeque<edge>();
 			temp.push(e.get(i));
 			q.add(temp);
@@ -197,26 +209,26 @@ g.getMst().createMinimumSpanningTree(g);
 		while (!q.isEmpty()) {
 			temp = q.remove();
 			if (temp.peek().getN1().getId() == idB || temp.peek().getN2().getId() == idB) {
-				
-				for (int i = 0; i < g.getMst().getMedges().size();i++) {
+
+				for (int i = 0; i < g.getMst().getMedges().size(); i++) {
 					g.getMst().getTaken().set(i, false);
 				}
 				return temp;
-				
+
 			}
-		e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
-		
-		ArrayList<edge>e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
-			
-		e.addAll(e2);
-		
+			e = searchThroughEdgesForMatch(temp.peek().getN1().getId(), g);
+
+			ArrayList<edge> e2 = searchThroughEdgesForMatch(temp.peek().getN2().getId(), g);
+
+			e.addAll(e2);
+
 			for (int i = 0; i < e.size(); i++) {
 				ArrayDeque<edge> temp2 = temp.clone();
 				temp2.add(e.get(i));
 				q.add(temp2);
 			}
 		}
-		for (int i = 0; i < g.getMst().getMedges().size();i++) {
+		for (int i = 0; i < g.getMst().getMedges().size(); i++) {
 			g.getMst().getTaken().set(i, false);
 		}
 		return null;
@@ -225,10 +237,10 @@ g.getMst().createMinimumSpanningTree(g);
 	public static boolean containsNode(int idA, edge e) {
 		return e.getN1().getId() == idA || e.getN2().getId() == idA;
 	}
-	
+
 	public static ArrayList<edge> searchThroughEdgesForMatch(int idA, Graph g) {
 		ArrayList<edge> e = new ArrayList<edge>();
-		for (int i = 0; i < g.getMst().getMedges().size();i++) {
+		for (int i = 0; i < g.getMst().getMedges().size(); i++) {
 			if (!g.getMst().getTaken().get(i)) {
 				if (containsNode(idA, g.getMst().getMedges().get(i))) {
 					e.add(g.getMst().getMedges().get(i));
@@ -237,8 +249,7 @@ g.getMst().createMinimumSpanningTree(g);
 			}
 		}
 		return e;
-		
+
 	}
 
 }
-
